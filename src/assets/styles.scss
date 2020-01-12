@@ -1,0 +1,48 @@
+@import '~material-design-icons-iconfont/dist/material-design-icons.css';
+
+.no-select {
+  user-select: none;
+}
+
+.wrapper {
+  padding: 1rem;
+}
+
+input {
+  border: 0;
+  border-bottom: 1px solid #18353a;
+  padding: .5rem 0;
+  background-color: transparent;
+  color: #FFF;
+  transition: border-bottom-color 500ms;
+
+  &:focus {
+    outline: none;
+    border-bottom-color: #5ECBD7;
+  }
+
+  &:disabled {
+    color: #999;
+  }
+}
+
+button {
+  border: 0;
+  background-color: #CCC;
+  padding: .5rem 1rem;
+  cursor: pointer;
+  transition: background-color 300ms;
+  user-select: none;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:hover {
+    background-color: #FFF;
+  }
+}
+
+$red: #FF494B;
+$green: #72BE47;
+$yellow: #FFB63C;
