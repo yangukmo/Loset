@@ -2,7 +2,7 @@ import { IAppInStorage } from '@/api/interface/app.interface'
 import { KEY } from '@/shared/enum/store'
 import ElectronStore from 'electron-store'
 
-export default class Store {
+export default class StorageManager {
   constructor(
     private readonly storage: ElectronStore,
   ) {

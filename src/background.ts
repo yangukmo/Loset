@@ -4,13 +4,17 @@ import AppManager from '@/api/app/app-manager'
 import HealthCheckManager from '@/api/hc/hc-manager'
 import IpcListener from '@/api/ipc.listener'
 import IpcService from '@/api/ipc.service'
-import Store from '@/api/store/store'
+import StorageManager from '@/api/store/storage-manager'
+import WindowManager from '@/api/window-mananger'
 import { app, BrowserWindow, protocol } from 'electron'
 import ElectronStore from 'electron-store'
 import 'reflect-metadata'
+import treeKill from 'tree-kill'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
+import fixPath from 'fix-path'
 
 const isDevelopment = (process.env.NODE_ENV !== 'production')
+fixPath()
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -43,17 +47,20 @@ function createWindow() {
     win.loadURL('app://./index.html')
   }
 
-  const electronStore = new ElectronStore({ defaults: Store.getDefaults() })
-  const store = new Store(electronStore)
-  const appManager = new AppManager(store)
+  const electronStore = new ElectronStore({ defaults: StorageManager.getDefaults() })
+  const storageManager = new StorageManager(electronStore)
+  const windowManager = new WindowManager(win)
+  const appManager = new AppManager(storageManager, windowManager)
   const hcManager = new HealthCheckManager()
-  const ipcService = new IpcService(appManager, hcManager, win)
+  const ipcService = new IpcService(appManager, hcManager, windowManager)
   const ipcRouter = new IpcListener(ipcService)
 
   win.on('closed', () => {
     win = null
 
     ipcRouter.removeEvents()
+    appManager.stopApps()
+    treeKill(process.pid)
   })
 }
 

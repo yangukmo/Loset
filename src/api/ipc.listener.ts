@@ -14,6 +14,9 @@ export default class IpcListener {
       .on(IPC_EVENT.SELECT_DIRECTORY, this.ipcService.selectDirectory)
       .on(IPC_EVENT.CREATE_APP, this.ipcService.createApp)
       .on(IPC_EVENT.DELETE_APPS, this.ipcService.deleteApps)
+      .on(IPC_EVENT.START_APP, this.ipcService.startApp)
+      .on(IPC_EVENT.STOP_APP, this.ipcService.stopApp)
+      .on(IPC_EVENT.DELETE_APP, this.ipcService.deleteApp)
   }
 
   removeEvents() {
@@ -21,5 +24,8 @@ export default class IpcListener {
     ipcMain.removeAllListeners(IPC_EVENT.SELECT_DIRECTORY)
     ipcMain.removeAllListeners(IPC_EVENT.CREATE_APP)
     ipcMain.removeAllListeners(IPC_EVENT.DELETE_APPS)
+    ipcMain.removeAllListeners(IPC_EVENT.START_APP)
+    ipcMain.removeAllListeners(IPC_EVENT.STOP_APP)
+    ipcMain.removeAllListeners(IPC_EVENT.DELETE_APP)
   }
 }

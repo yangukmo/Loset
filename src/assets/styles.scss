@@ -28,10 +28,11 @@ input {
 
 button {
   border: 0;
-  background-color: #CCC;
+  background-color: rgba(50, 50, 50, 0.5);
+  color: #CCC;
   padding: .5rem 1rem;
   cursor: pointer;
-  transition: background-color 300ms;
+  transition: background-color 300ms, color 300ms;
   user-select: none;
 
   &:focus {
@@ -39,7 +40,8 @@ button {
   }
 
   &:hover {
-    background-color: #FFF;
+    background-color: rgba(200, 200, 200, 0.9);
+    color: #000;
   }
 }
 

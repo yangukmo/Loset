@@ -4,6 +4,7 @@ import ConfigFile from '@/api/app/config-file'
 import HealthCheckManager from '@/api/hc/hc-manager'
 import HealthCheck2 from '@/api/hc/hc2'
 import { ISelectDirectory } from '@/api/interface/ipc-service.interface'
+import WindowManager from '@/api/window-mananger'
 import { IPC_EVENT } from '@/shared/enum'
 import { BrowserWindow, dialog, IpcMainEvent } from 'electron'
 import path from 'path'
@@ -12,7 +13,7 @@ export default class IpcService {
   constructor(
     private readonly appManager: AppManager,
     private readonly hcManager: HealthCheckManager,
-    private readonly mainWindow: BrowserWindow,
+    private readonly windowManager: WindowManager,
   ) {
   }
 
@@ -21,7 +22,7 @@ export default class IpcService {
   }
 
   selectDirectory = (event: IpcMainEvent): void => {
-    const dirs = dialog.showOpenDialogSync(this.mainWindow, { properties: ['openDirectory'] })
+    const dirs = dialog.showOpenDialogSync(this.windowManager.getWindow(), { properties: ['openDirectory'] })
 
     const response: ISelectDirectory = {
       valid: false,
@@ -99,8 +100,63 @@ export default class IpcService {
     event.returnValue = true
   }
 
-  deleteApps = (event: IpcMainEvent): void => {
+  deleteApps = async (event: IpcMainEvent): Promise<void> => {
+    const { response } = await dialog.showMessageBox(this.windowManager.getWindow(), {
+      buttons: ['Delete', 'Cancel'],
+      message: 'Do you want to delete all apps?'
+    })
+
+    if (response === 1) {
+      return
+    }
+
     this.appManager.deleteApps()
+    event.sender.send(IPC_EVENT.APPS, this.appManager.getApps())
+  }
+
+  startApp = (event: IpcMainEvent, id: string): void => {
+    const hasApp = this.appManager.hasApp(id)
+
+    if (!hasApp) {
+      console.log('# Not found App')
+      return
+    }
+
+    this.appManager.startApp(id)
+    event.sender.send(IPC_EVENT.APPS, this.appManager.getApps())
+  }
+
+  stopApp = (event: IpcMainEvent, id: string): void => {
+    const hasApp = this.appManager.hasApp(id)
+
+    if (!hasApp) {
+      console.log('# Not found App')
+      return
+    }
+
+    this.appManager.stopApp(id)
+    event.sender.send(IPC_EVENT.APPS, this.appManager.getApps())
+  }
+
+  deleteApp = async (event: IpcMainEvent, id: string): Promise<void> => {
+    const hasApp = this.appManager.hasApp(id)
+
+    if (!hasApp) {
+      console.log('# Not found App')
+      return
+    }
+
+    const { response } = await dialog.showMessageBox(this.windowManager.getWindow(), {
+      buttons: ['Delete', 'Cancel'],
+      message: 'Do you want to delete this app?'
+    })
+
+    if (response === 1) {
+      return
+    }
+
+    this.appManager.deleteApp(id)
+    event.sender.send(IPC_EVENT.APPS, this.appManager.getApps())
   }
 }
 

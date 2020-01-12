@@ -4,9 +4,10 @@
       <span class="name">{{ app.name }}</span>
       <status :active="app.active"/>
       <div>
-        <button>Start</button>
+        <button @click="startApp">Start</button>
+        <button @click="stopApp">Stop</button>
         <button>Output</button>
-        <dropdown title="ETC" :items="dropdownItems"/>
+        <button @click="deleteApp">Delete</button>
       </div>
     </section>
     <section id="detail">
@@ -18,26 +19,29 @@
 
 <script lang="ts">
   import { IAppInClient } from '@/api/interface/app.interface'
-  import Dropdown from '@/components/Dropdown.vue'
+  import Status from '@/components/Status.vue'
+  import { IPC_EVENT } from '@/shared/enum'
+  import { ipcRenderer } from 'electron'
   import { Component, Prop, Vue } from 'vue-property-decorator'
-  import Status from './Status.vue';
 
   @Component({
     components: {
-      Dropdown,
       Status,
-    }
+    },
   })
   export default class AppItem extends Vue {
     @Prop({ default: {}, required: true, type: Object }) app!: IAppInClient
-    private readonly dropdownItems: { name: string }[]
 
-    constructor() {
-      super()
-      this.dropdownItems = [
-        { name: 'Delete' },
-        { name: 'Settings' },
-      ]
+    startApp(): void {
+      ipcRenderer.send(IPC_EVENT.START_APP, this.app.id)
+    }
+
+    stopApp(): void {
+      ipcRenderer.send(IPC_EVENT.STOP_APP, this.app.id)
+    }
+
+    deleteApp(): void {
+      ipcRenderer.send(IPC_EVENT.DELETE_APP, this.app.id)
     }
   }
 </script>

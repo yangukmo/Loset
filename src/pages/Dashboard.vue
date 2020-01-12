@@ -34,7 +34,7 @@
     apps: IAppInClient[] = []
 
     created() {
-      ipcRenderer.once(IPC_EVENT.APPS, (event, data) => {
+      ipcRenderer.on(IPC_EVENT.APPS, (event, data) => {
         this.apps = data
       })
       ipcRenderer.send(IPC_EVENT.APPS)
@@ -42,6 +42,10 @@
 
     deleteApps() {
       ipcRenderer.send(IPC_EVENT.DELETE_APPS)
+    }
+
+    destroyed () {
+      ipcRenderer.removeAllListeners(IPC_EVENT.APPS)
     }
   }
 </script>

@@ -1,24 +1,34 @@
 import App from '@/api/app/app'
-import { DynamicAppInfo } from '@/api/app/dynamic-app-info'
+import { DynamicApp } from '@/api/app/dynamic-app'
 import { IAppInStorage } from '@/api/interface/app.interface'
-import { IDynamicAppInfo } from '@/api/interface/dynamic-app-info.interface'
-import Store from '@/api/store/store'
+import { IDynamicApp } from '@/api/interface/dynamic-app.interface'
+import StorageManager from '@/api/store/storage-manager'
+import WindowManager from '@/api/window-mananger'
+import { IPC_EVENT } from '@/shared/enum'
+import fs from 'fs'
 
 export default class AppManager {
-  private readonly apps: { [id: string]: DynamicAppInfo }
+  private readonly apps: { [id: string]: DynamicApp }
 
   constructor(
-    private readonly store: Store,
+    private readonly storageManager: StorageManager,
+    private readonly windowManager: WindowManager,
   ) {
     this.apps = {}
     this.initAppsFromStorage()
   }
 
   private initAppsFromStorage(): void {
-    const apps = this.store.getApps()
+    const apps = this.storageManager.getApps()
 
     Object.values(apps).forEach((app: IAppInStorage) => {
-      this.apps[app.id] = new DynamicAppInfo({ id: app.id })
+      const { id, dir } = app
+
+      if (dir && fs.existsSync(dir)) {
+        this.apps[id] = new DynamicApp({ id })
+      } else {
+        this.storageManager.deleteApp({ id })
+      }
     })
   }
 
@@ -28,14 +38,14 @@ export default class AppManager {
       return
     }
 
-    this.apps[id] = new DynamicAppInfo({ id: app.id })
-    this.store.createApp(app.renderForStorage())
+    this.apps[id] = new DynamicApp({ id: app.id })
+    this.storageManager.createApp(app.renderForStorage())
   }
 
-  getApps(): (IAppInStorage & IDynamicAppInfo)[] {
-    const appsInStorage = this.store.getApps()
+  getApps(): (IAppInStorage & IDynamicApp)[] {
+    const appsInStorage = this.storageManager.getApps()
     return Object.entries(this.apps).map(([id, dynamicAppInfo]) => {
-      return { ...dynamicAppInfo, ...appsInStorage[id] }
+      return { ...dynamicAppInfo.renderForClient(), ...appsInStorage[id] }
     })
   }
 
@@ -43,10 +53,41 @@ export default class AppManager {
     return !!this.apps[id]
   }
 
+  startApp(id: string): void {
+    const app = this.storageManager.getApp({ id })
+    const dynamicApp = this.apps[id]
+
+    dynamicApp.registerNotificationFn(() => this.windowManager.sendMessage(IPC_EVENT.APPS, this.getApps()))
+    dynamicApp.start({
+      start_cmd: app.start_cmd,
+      dir: app.dir,
+    })
+  }
+
+  stopApp(id: string): void {
+    const dynamicApp = this.apps[id]
+    dynamicApp.unregisterNotificationFn()
+    dynamicApp.stop()
+  }
+
+  stopApps(): void {
+    for (const app of Object.values(this.apps)) {
+      app.stop()
+    }
+  }
+
+  deleteApp(id: string): void {
+    const dynamicApp = this.apps[id]
+    if (dynamicApp.active) {
+      this.stopApp(id)
+    }
+    delete this.apps[id]
+    this.storageManager.deleteApp({ id })
+  }
+
   deleteApps(): void {
     for (const id in this.apps) {
-      delete this.apps[id]
-      this.store.deleteApp({ id })
+      this.deleteApp(id)
     }
   }
 }

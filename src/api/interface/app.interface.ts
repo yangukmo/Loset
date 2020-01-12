@@ -1,4 +1,4 @@
-import { IDynamicAppInfo } from '@/api/interface/dynamic-app-info.interface'
+import { IDynamicApp } from '@/api/interface/dynamic-app.interface'
 import { IHealthCheck } from '@/api/interface/health-check.interface'
 
 export interface IApp {
@@ -19,5 +19,5 @@ export interface IAppInStorage {
   hc: IHealthCheck
 }
 
-export interface IAppInClient extends IAppInStorage, IDynamicAppInfo {
+export interface IAppInClient extends IAppInStorage, IDynamicApp {
 }
