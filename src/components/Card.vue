@@ -1,6 +1,6 @@
 <template>
   <article class="card">
-    <header>
+    <header v-if="hasHeader">
       <h3 class="title" v-if="title">{{ title }}</h3>
       <div class="right">
         <slot name="header-right"/>
@@ -18,6 +18,10 @@
   @Component
   export default class Card extends Vue {
     @Prop() title!: string
+
+    get hasHeader(): boolean {
+      return !!(this.title || this.$slots['header-right'])
+    }
   }
 </script>
 

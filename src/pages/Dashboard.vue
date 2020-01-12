@@ -1,9 +1,5 @@
 <template>
   <section>
-    <div>
-
-    </div>
-
     <card title="Apps">
       <template slot="header-right">
         <router-link tag="button" to="/dashboard/new-app">Add app</router-link>
