@@ -1,7 +1,6 @@
 import App from '@/api/app/app'
 import { DynamicApp } from '@/api/app/dynamic-app'
-import { IAppInStorage } from '@/api/interface/app.interface'
-import { IDynamicApp } from '@/api/interface/dynamic-app.interface'
+import { IAppInClient, IAppInStorage } from '@/api/interface/app.interface'
 import StorageManager from '@/api/store/storage-manager'
 import WindowManager from '@/api/window-mananger'
 import { IPC_EVENT } from '@/shared/enum'
@@ -42,11 +41,19 @@ export default class AppManager {
     this.storageManager.createApp(app.renderForStorage())
   }
 
-  getApps(): (IAppInStorage & IDynamicApp)[] {
-    const appsInStorage = this.storageManager.getApps()
-    return Object.entries(this.apps).map(([id, dynamicAppInfo]) => {
-      return { ...dynamicAppInfo.renderForClient(), ...appsInStorage[id] }
-    })
+  getApp(id: string): IAppInClient {
+    const appInStorage = this.storageManager.getApp({ id })
+    const dynamicApp = this.apps[id]
+
+    return {
+      ...dynamicApp.renderForClient(),
+      ...appInStorage,
+    }
+  }
+
+  getApps(): IAppInClient[] {
+    return Object.keys(this.apps)
+      .map((id) => this.getApp(id))
   }
 
   hasApp(id: string): boolean {
@@ -58,15 +65,23 @@ export default class AppManager {
     const dynamicApp = this.apps[id]
 
     dynamicApp.registerNotificationFn(() => this.windowManager.sendMessage(IPC_EVENT.APPS, this.getApps()))
+    dynamicApp.registerOutputFn((data: Buffer) => this.windowManager.sendOutput({ id, data }))
     dynamicApp.start({
       start_cmd: app.start_cmd,
       dir: app.dir,
     })
   }
 
+  startApps(): void {
+    for (const id of Object.keys(this.apps)) {
+      this.startApp(id)
+    }
+  }
+
   stopApp(id: string): void {
     const dynamicApp = this.apps[id]
     dynamicApp.unregisterNotificationFn()
+    dynamicApp.unregisterOutputFn()
     dynamicApp.stop()
   }
 
@@ -89,5 +104,13 @@ export default class AppManager {
     for (const id in this.apps) {
       this.deleteApp(id)
     }
+  }
+
+  getOutput(id: string): Buffer[] {
+    return this.apps[id].output_log
+  }
+
+  deleteOutput(id: string): void {
+    this.apps[id].output_log.length = 0
   }
 }

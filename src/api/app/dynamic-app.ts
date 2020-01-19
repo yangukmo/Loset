@@ -1,30 +1,44 @@
-import { IDynamicApp, IStartDynamicApp } from '@/api/interface/dynamic-app.interface'
+import { IDynamicApp, IDynamicAppConstructor, IStartDynamicApp } from '@/api/interface/dynamic-app.interface'
 import { ChildProcess, exec } from 'child_process'
+import readline, { Interface } from 'readline'
 
 export class DynamicApp implements IDynamicApp {
   id: string
   active: boolean
-  output_log: any[]
-  error_log: any[]
+  output_log: Buffer[]
+  error_log: Buffer[]
   process: ChildProcess | undefined
   pid: number
-  private notificationFn: () => any
+  private notificationFn: () => void
+  private outputFn: (data: Buffer) => void
+  private stdout: Interface | undefined
+  private stderr: Interface | undefined
 
-  constructor(params: IDynamicApp) {
+  constructor(params: IDynamicAppConstructor) {
     this.id = params.id
     this.active = false
     this.output_log = []
     this.error_log = []
     this.pid = 0
     this.notificationFn = () => {}
+    this.outputFn = () => {}
   }
 
-  registerNotificationFn(fn: () => any): void {
+  registerNotificationFn(fn: () => void): void {
     this.notificationFn = fn
   }
 
   unregisterNotificationFn(): void {
-    this.notificationFn = () => {}
+    this.notificationFn = () => {
+    }
+  }
+
+  registerOutputFn(fn: (data: Buffer) => void): void {
+    this.outputFn = fn
+  }
+
+  unregisterOutputFn(): void {
+    this.outputFn = () => {}
   }
 
   pushOutputLog(data: Buffer): void {
@@ -60,28 +74,42 @@ export class DynamicApp implements IDynamicApp {
       this.process.kill('SIGTERM')
       this.pid = 0
       this.active = false
+      this.removeEvents()
       this.notificationFn()
+      this.output_log = []
     }
   }
 
   private listenEvents(): void {
-    this.process?.stdout?.on('data', (data: Buffer) => {
-      console.log('# stdout', data.toString())
+    this.stdout = readline.createInterface({ input: this.process?.stdout as NodeJS.ReadableStream, terminal: false })
+    this.stderr = readline.createInterface({ input: this.process?.stderr as NodeJS.ReadableStream, terminal: false })
+
+    this.stdout.on('line', (data: Buffer) => {
+      console.log('# stdout', data?.toString())
       this.pushOutputLog(data)
+      this.outputFn(data)
     })
 
-    this.process?.stderr?.on('data', (data: Buffer) => {
-      console.log('# stderr', data.toString())
+    this.stderr.on('line', (data: Buffer) => {
+      console.log('# stderr', data?.toString())
       this.pushErrorLog(data)
+      this.outputFn(data)
     })
 
     this.process?.on('close', (data: Buffer) => {
-      console.log('# close', data.toString())
+      console.log('# close', data?.toString())
       this.pushErrorLog(data)
       this.process = undefined
       this.pid = 0
       this.active = false
       this.notificationFn()
+      this.outputFn(data)
+      this.output_log = []
     })
+  }
+
+  private removeEvents(): void {
+    this.stdout?.removeAllListeners()
+    this.stderr?.removeAllListeners()
   }
 }

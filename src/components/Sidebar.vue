@@ -1,12 +1,12 @@
 <template>
   <nav>
-    <section class="area-logo">
-      <img src="../images/logo/logo-white.svg" id="img-logo" alt="logo" class="no-select"/>
-    </section>
+<!--    <section class="area-logo">-->
+<!--      <img src="../images/logo/logo-white.svg" id="img-logo" alt="logo" class="no-select"/>-->
+<!--    </section>-->
     <section class="area-menu">
       <ul id="menu">
-        <sidebar-item icon="dashboard" name="Dashboard" to="/dashboard"/>
-        <sidebar-item icon="settings" name="Settings" to="/settings"/>
+        <sidebar-item icon="desktop" name="Dashboard" to="/dashboard"/>
+        <sidebar-item icon="cog" name="Settings" to="/settings"/>
       </ul>
     </section>
   </nav>
@@ -19,7 +19,7 @@
   @Component({
     components: {
       SidebarItem,
-    }
+    },
   })
   export default class Sidebar extends Vue {
   }
@@ -29,6 +29,10 @@
   nav {
     color: #FFF;
     height: 100vh;
+    background-color: rgba(0, 0, 0, .2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     .area-logo {
       height: 100px;
@@ -43,6 +47,7 @@
         user-select: none;
       }
     }
+
     .area-menu {
       #menu {
         list-style: none;

@@ -1,23 +1,12 @@
 <template>
-  <div id="app">
-    <sidebar id="sidebar"/>
-    <section id="content">
-      <router-view class="wrapper"/>
-    </section>
-  </div>
+  <router-view/>
 </template>
 
 <script lang="ts">
-  import Sidebar from '@/components/Sidebar.vue'
   import { Component, Vue } from 'vue-property-decorator'
 
-  @Component({
-    components: {
-      Sidebar,
-    },
-  })
+  @Component
   export default class App extends Vue {
-
   }
 </script>
 
@@ -29,28 +18,5 @@
     background-size: cover;
     background-position: center center;
     background-repeat: repeat;
-  }
-
-  #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    color: #2c3e50;
-    display: grid;
-    grid-template-areas: "nav content";
-
-    grid-template-columns: 150px 1fr;
-    grid-template-rows: auto 1fr;
-    height: 100vh;
-
-    #sidebar {
-      grid-area: nav;
-    }
-
-    #content {
-      grid-area: content;
-      overflow-y: auto;
-      height: 100vh;
-    }
   }
 </style>

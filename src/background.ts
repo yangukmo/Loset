@@ -60,6 +60,7 @@ function createWindow() {
 
     ipcRouter.removeEvents()
     appManager.stopApps()
+    windowManager.closeChildWindows()
     treeKill(process.pid)
   })
 }

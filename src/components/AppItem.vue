@@ -1,36 +1,56 @@
 <template>
-  <article>
+  <div v-show="isShowApp" id="app-item-wrapper">
     <section id="info">
-      <span class="name">{{ app.name }}</span>
-      <status :active="app.active"/>
-      <div>
-        <button @click="startApp">Start</button>
-        <button @click="stopApp">Stop</button>
-        <button>Output</button>
-        <button @click="deleteApp">Delete</button>
-      </div>
+      <article>
+        <span class="name" v-text="app.name"/>
+      </article>
+      <article>
+        <span class="pid" v-text="app.pid" v-if="app.pid > 0"/>
+      </article>
+      <article>
+        <status :active="app.active"/>
+      </article>
+      <article>
+        <status :active="app.hc.active"/>
+      </article>
+      <article>
+        <status :active="app.auto_start"/>
+      </article>
+      <article class="control">
+        <icon-button class="start" icon="play" @click.native="startApp" :disabled="app.active"/>
+        <icon-button class="stop" icon="stop" @click.native="stopApp"/>
+        <icon-button class="directory" icon="folder-open" @click.native="openDirectory"/>
+        <icon-button class="terminal" icon="terminal" @click.native="openOutputWindow"/>
+        <icon-button class="delete" icon="trash" @click.native="deleteApp"/>
+        <icon-button class="detail" icon="chevron-right" :to="'/dashboard/apps/' + app.id"/>
+      </article>
     </section>
-    <section id="detail">
-      <p style="color: #FFF; font-size: 14px">{{ app }}</p>
-    </section>
-
-  </article>
+  </div>
 </template>
 
 <script lang="ts">
   import { IAppInClient } from '@/api/interface/app.interface'
+  import IconButton from '@/components/IconButton.vue'
   import Status from '@/components/Status.vue'
   import { IPC_EVENT } from '@/shared/enum'
   import { ipcRenderer } from 'electron'
   import { Component, Prop, Vue } from 'vue-property-decorator'
+  import { mapGetters } from 'vuex'
 
   @Component({
     components: {
       Status,
+      IconButton,
     },
+    computed: mapGetters('searchApp', ['getKeyword']),
   })
   export default class AppItem extends Vue {
     @Prop({ default: {}, required: true, type: Object }) app!: IAppInClient
+    private getKeyword!: string
+
+    get isShowApp(): boolean {
+      return this.getKeyword ? this.app.name.toUpperCase().includes(this.getKeyword.toUpperCase()) : true
+    }
 
     startApp(): void {
       ipcRenderer.send(IPC_EVENT.START_APP, this.app.id)
@@ -40,21 +60,42 @@
       ipcRenderer.send(IPC_EVENT.STOP_APP, this.app.id)
     }
 
+    openDirectory(): void {
+      ipcRenderer.send(IPC_EVENT.OPEN_DIRECTORY, this.app.id)
+    }
+
     deleteApp(): void {
       ipcRenderer.send(IPC_EVENT.DELETE_APP, this.app.id)
+    }
+
+    openOutputWindow(): void {
+      ipcRenderer.send(IPC_EVENT.OPEN_OUTPUT_WINDOW, this.app.id)
     }
   }
 </script>
 
 <style lang="scss" scoped>
-  article {
-    padding: .5rem;
+  #app-item-wrapper {
     color: #FFF;
+    background-color: rgba(14, 84, 105, 0.2);
+    border-radius: .25rem;
+    padding: .75rem 1rem;
+    margin-bottom: .25rem;
+    user-select: none;
 
     #info {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 150px;
+
+      article {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .name {
+        font-weight: 600;
+      }
     }
   }
 </style>

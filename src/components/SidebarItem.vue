@@ -1,23 +1,18 @@
 <template>
   <router-link tag="li" :to="to">
-    <icon :icon="icon"/>
-    <span class="name">{{ name }}</span>
+    <font-awesome-icon :icon="icon" class="icon"/>
+    <!--    <span class="name">{{ name }}</span>-->
   </router-link>
 </template>
 
 <script lang="ts">
-  import Icon from '@/components/Icon.vue'
   import { Component, Prop, Vue } from 'vue-property-decorator'
 
-  @Component({
-    components: {
-      Icon,
-    }
-  })
+  @Component
   export default class SidebarItem extends Vue {
-    @Prop() icon!: string
-    @Prop() name!: string
-    @Prop() to!: string
+    @Prop({ type: String, required: true, default: '' }) icon!: string
+    @Prop({ type: String, required: true, default: '' }) name!: string
+    @Prop({ type: String, required: false, default: '' }) to!: string
   }
 </script>
 
@@ -27,14 +22,11 @@
     color: #999;
     display: flex;
     align-items: center;
-    font-size: 14px;
     line-height: 15px;
     user-select: none;
 
-    i {
-      margin-right: 5px;
+    .icon {
       cursor: pointer;
-      font-size: 16px;
     }
 
     .name {
@@ -43,6 +35,10 @@
 
     &.active {
       color: #FFF;
+
+      .name {
+        font-weight: 600;
+      }
     }
   }
 </style>

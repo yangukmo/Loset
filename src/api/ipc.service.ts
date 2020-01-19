@@ -6,7 +6,7 @@ import HealthCheck2 from '@/api/hc/hc2'
 import { ISelectDirectory } from '@/api/interface/ipc-service.interface'
 import WindowManager from '@/api/window-mananger'
 import { IPC_EVENT } from '@/shared/enum'
-import { BrowserWindow, dialog, IpcMainEvent } from 'electron'
+import { dialog, IpcMainEvent, shell } from 'electron'
 import path from 'path'
 
 export default class IpcService {
@@ -15,6 +15,10 @@ export default class IpcService {
     private readonly hcManager: HealthCheckManager,
     private readonly windowManager: WindowManager,
   ) {
+  }
+
+  getApp = (event: IpcMainEvent, id: string): void => {
+    event.sender.send(IPC_EVENT.APP, this.appManager.getApp(id))
   }
 
   getApps = (event: IpcMainEvent): void => {
@@ -126,6 +130,10 @@ export default class IpcService {
     event.sender.send(IPC_EVENT.APPS, this.appManager.getApps())
   }
 
+  startApps = (): void => {
+    this.appManager.startApps()
+  }
+
   stopApp = (event: IpcMainEvent, id: string): void => {
     const hasApp = this.appManager.hasApp(id)
 
@@ -136,6 +144,10 @@ export default class IpcService {
 
     this.appManager.stopApp(id)
     event.sender.send(IPC_EVENT.APPS, this.appManager.getApps())
+  }
+
+  stopApps = (): void => {
+    this.appManager.stopApps()
   }
 
   deleteApp = async (event: IpcMainEvent, id: string): Promise<void> => {
@@ -157,6 +169,23 @@ export default class IpcService {
 
     this.appManager.deleteApp(id)
     event.sender.send(IPC_EVENT.APPS, this.appManager.getApps())
+  }
+
+  openOutputWindow = (event: IpcMainEvent, id: string): void => {
+    this.windowManager.openChildWindow(id)
+  }
+
+  getAllOutput = (event: IpcMainEvent, id: string): void => {
+    event.sender.send(IPC_EVENT.GET_ALL_OUTPUT, this.appManager.getOutput(id))
+  }
+
+  deleteOutput = (event: IpcMainEvent, id: string): void => {
+    this.appManager.deleteOutput(id)
+  }
+
+  openDirectory = (event: IpcMainEvent, id: string): void => {
+    const app = this.appManager.getApp(id)
+    shell.openItem(app.dir)
   }
 }
 

@@ -1,4 +1,7 @@
-@import '~material-design-icons-iconfont/dist/material-design-icons.css';
+$red: #FF494B;
+$green: #72BE47;
+$yellow: #FFB63C;
+$blue: #4798BE;
 
 .no-select {
   user-select: none;
@@ -15,10 +18,11 @@ input {
   background-color: transparent;
   color: #FFF;
   transition: border-bottom-color 500ms;
+  width: 100%;
 
   &:focus {
     outline: none;
-    border-bottom-color: #5ECBD7;
+    border-bottom-color: $blue;
   }
 
   &:disabled {
@@ -30,7 +34,8 @@ button {
   border: 0;
   background-color: rgba(50, 50, 50, 0.5);
   color: #CCC;
-  padding: .5rem 1rem;
+  padding: .25rem .75rem;
+  font-size: 14px;
   cursor: pointer;
   transition: background-color 300ms, color 300ms;
   user-select: none;
@@ -43,8 +48,15 @@ button {
     background-color: rgba(200, 200, 200, 0.9);
     color: #000;
   }
-}
 
-$red: #FF494B;
-$green: #72BE47;
-$yellow: #FFB63C;
+  &:disabled {
+    background-color: rgba(50, 50, 50, 0.2);
+    color: #AAA;
+  }
+
+  &:disabled:hover {
+    background-color: rgba(50, 50, 50, 0.2);
+    cursor: not-allowed;
+    color: #AAA;
+  }
+}

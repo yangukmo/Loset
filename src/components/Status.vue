@@ -1,29 +1,15 @@
 <template>
   <div class="box" :class="computedClass">
-    <icon :icon="computedActive" class="icon"/>
     <span>{{ computedMsg }}</span>
   </div>
 </template>
 
 <script lang="ts">
-  import Icon from '@/components/Icon.vue'
-  import { Component, Vue, Prop } from 'vue-property-decorator'
+  import { Component, Prop, Vue } from 'vue-property-decorator'
 
-  @Component({
-    components: {
-      Icon,
-    },
-  })
+  @Component
   export default class Status extends Vue {
-    @Prop({
-      default: false,
-      required: true,
-      type: Boolean,
-    }) active!: boolean
-
-    get computedActive(): string {
-      return this.active ? 'check_circle' : 'error'
-    }
+    @Prop({ default: false, required: true, type: Boolean }) active!: boolean
 
     get computedMsg(): string {
       return this.active ? 'ENABLE' : 'DISABLE'
@@ -39,6 +25,7 @@
   .box {
     border-radius: .25rem;
     font-size: 12px;
+    font-weight: 600;
     padding: .25rem .5rem;
     display: flex;
     align-items: center;
@@ -51,11 +38,6 @@
 
     &.disable {
       color: $red;
-    }
-
-    .icon {
-      font-size: 16px;
-      margin-right: 5px;
     }
   }
 </style>
