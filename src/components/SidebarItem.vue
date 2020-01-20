@@ -1,7 +1,6 @@
 <template>
   <router-link tag="li" :to="to">
     <font-awesome-icon :icon="icon" class="icon"/>
-    <!--    <span class="name">{{ name }}</span>-->
   </router-link>
 </template>
 
@@ -22,6 +21,7 @@
     color: #999;
     display: flex;
     align-items: center;
+    justify-content: center;
     line-height: 15px;
     user-select: none;
 
