@@ -151,7 +151,7 @@
     }
 
     cancel(): void {
-      this.$router.go(-1)
+      this.$router.push('/dashboard')
     }
   }
 </script>

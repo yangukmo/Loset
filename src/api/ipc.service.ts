@@ -8,6 +8,7 @@ import WindowManager from '@/api/window-mananger'
 import { IPC_EVENT } from '@/shared/enum'
 import { dialog, IpcMainEvent, shell } from 'electron'
 import path from 'path'
+import app = Electron.app
 
 export default class IpcService {
   constructor(
@@ -73,8 +74,8 @@ export default class IpcService {
     event.returnValue = response
   }
 
-  createApp = (event: IpcMainEvent, appData: ICreateApp): void => {
-    const id = App.generateId(appData.dir)
+  createApp = (event: IpcMainEvent, app: ICreateApp): void => {
+    const id = App.generateId(app.dir)
     const hasApp = this.appManager.hasApp(id)
 
     if (hasApp) {
@@ -85,29 +86,40 @@ export default class IpcService {
 
     this.appManager.addApp(new App({
       id,
-      dir: appData.dir,
-      name: appData.name,
-      start_cmd: appData.start_cmd,
-      auto_start: appData.auto_start,
-      hc: appData.hc,
+      dir: app.dir,
+      name: app.name,
+      start_cmd: app.start_cmd,
+      auto_start: app.auto_start,
+      hc: app.hc,
     }))
 
-    if (appData.hc.active) {
+    if (app.hc.active) {
       this.hcManager.addHealthCheck(new HealthCheck2({
         id,
-        port: appData.hc.port,
-        path: appData.hc.path,
-        interval: appData.hc.interval,
+        port: app.hc.port,
+        path: app.hc.path,
+        interval: app.hc.interval,
       }))
     }
 
     event.returnValue = true
   }
 
+  updateApp = (event: IpcMainEvent, app: IUpdateApp): void => {
+    console.log('# app', app)
+    this.appManager.updateApp({
+      id: app.id,
+      name: app.name,
+      start_cmd: app.start_cmd,
+      auto_start: app.auto_start,
+      hc: app.hc,
+    })
+  }
+
   deleteApps = async (event: IpcMainEvent): Promise<void> => {
     const { response } = await dialog.showMessageBox(this.windowManager.getWindow(), {
       buttons: ['Delete', 'Cancel'],
-      message: 'Do you want to delete all apps?'
+      message: 'Do you want to delete all apps?',
     })
 
     if (response === 1) {
@@ -160,7 +172,7 @@ export default class IpcService {
 
     const { response } = await dialog.showMessageBox(this.windowManager.getWindow(), {
       buttons: ['Delete', 'Cancel'],
-      message: 'Do you want to delete this app?'
+      message: 'Do you want to delete this app?',
     })
 
     if (response === 1) {
@@ -191,6 +203,19 @@ export default class IpcService {
 
 interface ICreateApp {
   dir: string
+  name: string
+  start_cmd: string
+  auto_start: boolean
+  hc: {
+    active: boolean
+    port: number
+    path: string
+    interval: number
+  }
+}
+
+interface IUpdateApp {
+  id: string
   name: string
   start_cmd: string
   auto_start: boolean

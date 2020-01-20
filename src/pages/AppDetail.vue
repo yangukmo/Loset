@@ -115,11 +115,17 @@
     }
 
     update(): void {
-
+      ipcRenderer.send(IPC_EVENT.UPDATE_APP, {
+        id: this.app.id,
+        name: this.app.name,
+        start_cmd: this.app.start_cmd,
+        auto_start: this.app.auto_start,
+        hc: this.app.hc,
+      })
     }
 
     back(): void {
-      this.$router.go(-1)
+      this.$router.push('/dashboard')
     }
 
     destroyed(): void {

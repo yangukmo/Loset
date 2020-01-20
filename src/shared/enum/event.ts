@@ -3,6 +3,7 @@ export enum IPC_EVENT {
   APPS = 'apps',
   SELECT_DIRECTORY = 'select-directory',
   CREATE_APP = 'create-app',
+  UPDATE_APP = 'update-app',
   DELETE_APP = 'delete-app',
   DELETE_APPS = 'delete-apps',
   START_APP = 'start-app',

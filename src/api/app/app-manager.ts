@@ -15,6 +15,7 @@ export default class AppManager {
   ) {
     this.apps = {}
     this.initAppsFromStorage()
+    this.autoStartApps()
   }
 
   private initAppsFromStorage(): void {
@@ -31,14 +32,40 @@ export default class AppManager {
     })
   }
 
+  private autoStartApps(): void {
+    Object.values(this.apps).forEach(({ id }) => {
+      const app = this.getApp(id)
+      if (app.auto_start) {
+        this.startApp(id)
+      }
+    })
+  }
+
   addApp(app: App): void {
     const { id } = app
+
     if (this.hasApp(id)) { // TODO 이미 존재하는 앱
       return
     }
 
     this.apps[id] = new DynamicApp({ id: app.id })
     this.storageManager.createApp(app.renderForStorage())
+  }
+
+  updateApp(app: IUpdateApp): void {
+    const { id } = app
+
+    if (!this.hasApp(id)) {
+      return
+    }
+
+    this.storageManager.updateApp({
+      id,
+      name: app.name,
+      start_cmd: app.start_cmd,
+      auto_start: app.auto_start,
+      hc: app.hc,
+    })
   }
 
   getApp(id: string): IAppInClient {
@@ -112,5 +139,18 @@ export default class AppManager {
 
   deleteOutput(id: string): void {
     this.apps[id].output_log.length = 0
+  }
+}
+
+interface IUpdateApp {
+  id: string
+  name: string
+  start_cmd: string
+  auto_start: boolean
+  hc: {
+    active: boolean
+    port: number
+    path: string
+    interval: number
   }
 }

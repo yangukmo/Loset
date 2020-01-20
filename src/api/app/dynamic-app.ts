@@ -104,7 +104,6 @@ export class DynamicApp implements IDynamicApp {
       this.active = false
       this.notificationFn()
       this.outputFn(data)
-      this.output_log = []
     })
   }
 
