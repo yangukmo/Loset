@@ -8,7 +8,6 @@ import WindowManager from '@/api/window-mananger'
 import { IPC_EVENT } from '@/shared/enum'
 import { dialog, IpcMainEvent, shell } from 'electron'
 import path from 'path'
-import app = Electron.app
 
 export default class IpcService {
   constructor(
@@ -106,7 +105,6 @@ export default class IpcService {
   }
 
   updateApp = (event: IpcMainEvent, app: IUpdateApp): void => {
-    console.log('# app', app)
     this.appManager.updateApp({
       id: app.id,
       name: app.name,

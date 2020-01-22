@@ -21,13 +21,13 @@
     padding: .5rem;
     width: 30px;
     height: 30px;
-    cursor: pointer;
+    /*cursor: pointer;*/
 
     &.no-bg {
       background-color: transparent;
       color: #AAA;
 
-      &:hover {
+      &:hover > * {
         color: #FFF;
       }
 

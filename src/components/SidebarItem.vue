@@ -26,11 +26,11 @@
     user-select: none;
 
     .icon {
-      cursor: pointer;
+      /*cursor: pointer;*/
     }
 
     .name {
-      cursor: pointer;
+      /*cursor: pointer;*/
     }
 
     &.active {

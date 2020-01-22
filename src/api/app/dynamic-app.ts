@@ -1,6 +1,7 @@
 import { IDynamicApp, IDynamicAppConstructor, IStartDynamicApp } from '@/api/interface/dynamic-app.interface'
 import { ChildProcess, exec } from 'child_process'
 import readline, { Interface } from 'readline'
+import ProcessEnv = NodeJS.ProcessEnv
 
 export class DynamicApp implements IDynamicApp {
   id: string
@@ -13,6 +14,7 @@ export class DynamicApp implements IDynamicApp {
   private outputFn: (data: Buffer) => void
   private stdout: Interface | undefined
   private stderr: Interface | undefined
+  private env: ProcessEnv
 
   constructor(params: IDynamicAppConstructor) {
     this.id = params.id
@@ -22,6 +24,9 @@ export class DynamicApp implements IDynamicApp {
     this.pid = 0
     this.notificationFn = () => {}
     this.outputFn = () => {}
+    this.env = process.env
+
+    delete this.env.NODE_ENV
   }
 
   registerNotificationFn(fn: () => void): void {
@@ -38,7 +43,8 @@ export class DynamicApp implements IDynamicApp {
   }
 
   unregisterOutputFn(): void {
-    this.outputFn = () => {}
+    this.outputFn = () => {
+    }
   }
 
   pushOutputLog(data: Buffer): void {
@@ -59,9 +65,11 @@ export class DynamicApp implements IDynamicApp {
 
   start(params: IStartDynamicApp): void {
     this.stop()
+    const { env } = process
+    delete env.NODE_ENV
 
     console.info('# Start App')
-    this.process = exec(params.start_cmd, { cwd: params.dir, maxBuffer: 100 * 1024 * 1024 })
+    this.process = exec(params.start_cmd, { cwd: params.dir, env, maxBuffer: 100 * 1024 * 1024 })
     this.pid = process.pid
     this.active = true
     this.notificationFn()

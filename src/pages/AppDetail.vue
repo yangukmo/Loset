@@ -1,6 +1,6 @@
 <template>
   <div id="app-detail-wrapper">
-    <section>
+    <section class="app-detail-content">
       <validation-observer v-slot="{ invalid }">
         <form v-if="app.id">
           <card>
@@ -104,7 +104,7 @@
     }
 
     listenEvents(): void {
-      ipcRenderer.on(IPC_EVENT.APP, (event, data) => {
+      ipcRenderer.once(IPC_EVENT.APP, (event, data) => {
         this.app = data
       })
       ipcRenderer.send(IPC_EVENT.APP, this.id)
@@ -122,6 +122,7 @@
         auto_start: this.app.auto_start,
         hc: this.app.hc,
       })
+      this.$router.push('/dashboard')
     }
 
     back(): void {
@@ -141,7 +142,7 @@
     align-items: center;
     justify-content: center;
 
-    section {
+    section.app-detail-content {
       width: 100%;
       max-width: 500px;
 

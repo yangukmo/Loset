@@ -15,13 +15,13 @@
 </template>
 
 <script lang="ts">
+  import { IAppInClient } from '@/api/interface/app.interface'
   import IconButton from '@/components/IconButton.vue'
   import OutputTerminal from '@/components/OutputTerminal.vue'
   import { IPC_EVENT } from '@/shared/enum'
   import { EventBus } from '@/shared/EventBus'
   import { ipcRenderer } from 'electron'
   import { Component, Vue } from 'vue-property-decorator'
-  import { IAppInClient } from '@/api/interface/app.interface'
 
   @Component({
     components: { IconButton, OutputTerminal },
@@ -87,12 +87,32 @@
     header {
       grid-area: title;
       color: #FFF;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display: grid;
+      padding: 10px;
+      grid-template-areas: "empty title control";
+      grid-template-columns: 1fr 1fr 1fr;
+
+      .title {
+        grid-area: title;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        span {
+          font-size: 16px;
+        }
+      }
+
+      .control {
+        grid-area: control;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+      }
     }
 
     #area-terminal {
+      padding: 0 .5rem;
       grid-area: terminal;
       background-color: #000;
     }

@@ -103,6 +103,14 @@ app.on('ready', async () => {
   createWindow()
 })
 
+app.setAboutPanelOptions({
+  applicationName: process.env.npm_package_productName,
+  applicationVersion: process.env.npm_package_version,
+  iconPath: '',
+  version: '',
+  website: process.env.npm_package_homepate,
+})
+
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
   if (process.platform === 'win32') {

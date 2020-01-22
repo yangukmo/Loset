@@ -46,7 +46,7 @@
         width: 45px;
         -webkit-user-drag: none;
         user-select: none;
-        cursor: pointer;
+        /*cursor: pointer;*/
       }
     }
 

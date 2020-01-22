@@ -31,6 +31,7 @@
       const searchAddon: SearchAddon = new SearchAddon()
       this.terminal.loadAddon(searchAddon)
       this.terminal.loadAddon(fitAddon)
+      this.terminal.setOption('fontSize', 12)
       this.terminal.open(document.getElementById('terminal') as HTMLElement)
       fitAddon.fit()
 

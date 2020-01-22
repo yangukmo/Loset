@@ -1,5 +1,5 @@
 <template>
-  <i class="material-icons">{{ icon }}</i>
+  <font-awesome-icon :icon="icon" class="icon"/>
 </template>
 
 <script lang="ts">

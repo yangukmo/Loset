@@ -22,6 +22,7 @@
           <div>Control</div>
         </div>
         <app-item v-for="app of apps" :app="app" :key="app.id"/>
+        <not-found-apps v-if="!apps.length"/>
       </div>
     </section>
   </div>
@@ -32,6 +33,7 @@
   import AppItem from '@/components/AppItem.vue'
   import Card from '@/components/Card.vue'
   import IconButton from '@/components/IconButton.vue'
+  import NotFoundApps from '@/components/NotFoundApps.vue'
   import SearchApp from '@/components/SearchApp.vue'
   import { IPC_EVENT } from '@/shared/enum'
   import { ipcRenderer } from 'electron'
@@ -39,6 +41,7 @@
 
   @Component({
     components: {
+      NotFoundApps,
       AppItem,
       Card,
       SearchApp,
