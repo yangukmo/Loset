@@ -19,9 +19,7 @@
       <article class="control">
         <icon-button class="start" icon="play" @click.native="startApp" :disabled="app.active"/>
         <icon-button class="stop" icon="stop" @click.native="stopApp"/>
-        <icon-button class="directory" icon="folder-open" @click.native="openDirectory"/>
-        <icon-button class="terminal" icon="terminal" @click.native="openOutputWindow"/>
-        <icon-button class="delete" icon="trash" @click.native="deleteApp"/>
+        <dropdown-menu @open-directory="openDirectory" @open-terminal="openOutputWindow" @delete-app="deleteApp"/>
         <icon-button class="detail" icon="chevron-right" :to="'/dashboard/apps/' + app.id"/>
       </article>
     </section>
@@ -30,6 +28,7 @@
 
 <script lang="ts">
   import { IAppInClient } from '@/api/interface/app.interface'
+  import DropdownMenu from '@/components/DropdownMenu.vue'
   import IconButton from '@/components/IconButton.vue'
   import Status from '@/components/Status.vue'
   import { IPC_EVENT } from '@/shared/enum'
@@ -41,6 +40,7 @@
     components: {
       Status,
       IconButton,
+      DropdownMenu,
     },
     computed: mapGetters('searchApp', ['getKeyword']),
   })
@@ -82,10 +82,11 @@
     padding: .75rem 1rem;
     margin-bottom: .25rem;
     user-select: none;
+    position: relative;
 
     #info {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 150px;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 120px;
 
       article {
         display: flex;

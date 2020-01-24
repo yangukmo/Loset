@@ -76,7 +76,7 @@
   import Card from '@/components/Card.vue'
   import Checkbox from '@/components/Checkbox.vue'
   import DirectorySelector from '@/components/DirectorySelector.vue'
-  import InputLabel from '@/components/input/InputLabel.vue'
+  import InputLabel from '@/components/InputLabel.vue'
   import { IPC_EVENT } from '@/shared/enum'
   import { ipcRenderer } from 'electron'
   import { Component, Vue } from 'vue-property-decorator'

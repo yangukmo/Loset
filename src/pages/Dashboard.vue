@@ -110,7 +110,7 @@
 
         .title {
           display: grid;
-          grid-template-columns: 1fr 1fr 1fr 1fr 1fr 150px;
+          grid-template-columns: 1fr 1fr 1fr 1fr 1fr 120px;
           margin-bottom: 10px;
           font-size: 14px;
           font-weight: 600;

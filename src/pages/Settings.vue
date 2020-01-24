@@ -14,7 +14,7 @@
 
 <script lang="ts">
   import Card from '@/components/Card.vue'
-  import InputLabel from '@/components/input/InputLabel.vue'
+  import InputLabel from '@/components/InputLabel.vue'
   import { Component, Vue } from 'vue-property-decorator'
 
   @Component({

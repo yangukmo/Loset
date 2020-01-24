@@ -1,6 +1,7 @@
 <template>
   <router-link tag="button" :to="to" class="icon-button" :class="{ 'no-bg': !bg }" :disabled="disabled">
     <font-awesome-icon :icon="icon" class="icon"/>
+    <span class="content" v-if="content">{{ content }}</span>
   </router-link>
 </template>
 
@@ -13,15 +14,17 @@
     @Prop({ type: String, required: false, default: '' }) to!: string
     @Prop({ type: Boolean, required: false, default: false }) bg!: boolean
     @Prop({ type: Boolean, required: false, default: false }) disabled!: boolean
+    @Prop({ type: String, required: false, default: '' }) content!: string
   }
 </script>
 
 <style lang="scss" scoped>
   .icon-button {
     padding: .5rem;
-    width: 30px;
+    width: auto;
     height: 30px;
-    /*cursor: pointer;*/
+    display: flex;
+    flex-direction: row;
 
     &.no-bg {
       background-color: transparent;
@@ -38,6 +41,10 @@
           color: #777;
         }
       }
+    }
+
+    .content {
+      margin-left: 10px;
     }
   }
 </style>

@@ -81,7 +81,7 @@
   import Card from '@/components/Card.vue'
   import DirectorySelector from '@/components/DirectorySelector.vue'
   import IconButton from '@/components/IconButton.vue'
-  import InputLabel from '@/components/input/InputLabel.vue'
+  import InputLabel from '@/components/InputLabel.vue'
   import '@/plugins/vee-validate'
   import { IPC_EVENT } from '@/shared/enum'
   import { ipcRenderer } from 'electron'
