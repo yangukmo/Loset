@@ -3,8 +3,9 @@ import store from '@/store'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import { ValidationObserver, ValidationProvider } from 'vee-validate'
 import Vue from 'vue'
+import Toasted from 'vue-toasted'
 import App from './App.vue'
 
 library.add(fas)
@@ -13,6 +14,7 @@ Vue.component('validation-provider', ValidationProvider)
 Vue.component('validation-observer', ValidationObserver)
 
 Vue.config.productionTip = false
+Vue.use(Toasted)
 
 new Vue({
   render: h => h(App),
