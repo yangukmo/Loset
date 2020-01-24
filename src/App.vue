@@ -3,10 +3,36 @@
 </template>
 
 <script lang="ts">
+  import { MESSAGE_EVENT } from '@/shared/enum/message'
+  import { ipcRenderer } from 'electron'
   import { Component, Vue } from 'vue-property-decorator'
+  import { ToastOptions } from 'vue-toasted'
 
   @Component
   export default class App extends Vue {
+    created(): void {
+      const toastOptions: ToastOptions = {
+        position: 'bottom-right',
+        duration: 3000,
+      }
+
+      ipcRenderer
+        .on(MESSAGE_EVENT.SUCCESS, (event, data) => {
+          this.$toasted.success(data, toastOptions)
+        })
+        .on(MESSAGE_EVENT.INFO, (event, data) => {
+          this.$toasted.info(data, toastOptions)
+        })
+        .on(MESSAGE_EVENT.ERROR, (event, data) => {
+          this.$toasted.error(data, toastOptions)
+        })
+    }
+
+    destoryed(): void {
+      ipcRenderer.removeAllListeners(MESSAGE_EVENT.SUCCESS)
+      ipcRenderer.removeAllListeners(MESSAGE_EVENT.ERROR)
+      ipcRenderer.removeAllListeners(MESSAGE_EVENT.INFO)
+    }
   }
 </script>
 
@@ -18,5 +44,21 @@
     background-size: cover;
     background-position: center center;
     background-repeat: repeat;
+
+    .toasted-container {
+      .toasted {
+        &.success {
+          background-color: $green;
+        }
+
+        &.error {
+          background-color: $red;
+        }
+
+        &.info {
+          background-color: $yellow;
+        }
+      }
+    }
   }
 </style>

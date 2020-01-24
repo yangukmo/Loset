@@ -6,6 +6,7 @@ import HealthCheck2 from '@/api/hc/hc2'
 import { ISelectDirectory } from '@/api/interface/ipc-service.interface'
 import WindowManager from '@/api/window-mananger'
 import { IPC_EVENT } from '@/shared/enum'
+import { MESSAGE, MESSAGE_EVENT } from '@/shared/enum/message'
 import { dialog, IpcMainEvent, shell } from 'electron'
 import path from 'path'
 
@@ -56,7 +57,7 @@ export default class IpcService {
 
     if (hasApp) {
       event.returnValue = response
-      dialog.showErrorBox('Error', '이미 존재하는 앱 입니다.')
+      event.sender.send(MESSAGE_EVENT.ERROR, MESSAGE.ALREADY_REGISTERED_APP)
       return
     }
 
@@ -79,7 +80,7 @@ export default class IpcService {
 
     if (hasApp) {
       event.returnValue = false
-      dialog.showErrorBox('Error', '이미 존재하는 앱 입니다.')
+      event.sender.send(MESSAGE_EVENT.ERROR, MESSAGE.ALREADY_REGISTERED_APP)
       return
     }
 
@@ -117,7 +118,7 @@ export default class IpcService {
   deleteApps = async (event: IpcMainEvent): Promise<void> => {
     const { response } = await dialog.showMessageBox(this.windowManager.getWindow(), {
       buttons: ['Delete', 'Cancel'],
-      message: 'Do you want to delete all apps?',
+      message: MESSAGE.DELETE_ALL_APPS,
     })
 
     if (response === 1) {
@@ -170,7 +171,7 @@ export default class IpcService {
 
     const { response } = await dialog.showMessageBox(this.windowManager.getWindow(), {
       buttons: ['Delete', 'Cancel'],
-      message: 'Do you want to delete this app?',
+      message: MESSAGE.DELETE_APP,
     })
 
     if (response === 1) {
