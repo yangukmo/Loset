@@ -13,7 +13,7 @@ $blue: #4798BE;
 
 input {
   border: 0;
-  border-bottom: 1px solid #18353a;
+  border-bottom: 1px solid #18353A;
   padding: .5rem 0;
   background-color: transparent;
   color: #FFF;
@@ -37,7 +37,6 @@ button {
   color: #CCC;
   padding: .5rem .75rem;
   font-size: 14px;
-  //cursor: pointer;
   transition: background-color 300ms, color 300ms;
   user-select: none;
 
@@ -45,9 +44,13 @@ button {
     outline: none;
   }
 
-  &:hover {
-    background-color: rgba(112, 194, 232, 0.9);
-    color: #000;
+  &:enabled:hover {
+    color: #AAA;
+
+    &:not(.no-bg) {
+      background-color: rgba(112, 194, 232, 0.9);
+      color: #000;
+    }
   }
 
   &:disabled {
@@ -56,8 +59,11 @@ button {
   }
 
   &:disabled:hover {
-    background-color: rgba(50, 50, 50, 0.2);
     cursor: not-allowed;
     color: #AAA;
+
+    &:not(.no-bg) {
+      background-color: rgba(50, 50, 50, 0.2);
+    }
   }
 }

@@ -1,8 +1,6 @@
-import HealthCheck from '@/api/hc/hc'
-import { IApp, IAppInClient, IAppInStorage } from '@/api/interface/app.interface'
-import { IHealthCheck, IHealthCheck2 } from '@/api/interface/health-check.interface'
+import { IApp, IAppInStorage } from '@/api/interface/app.interface'
+import { IHealthCheck } from '@/api/interface/health-check.interface'
 import crypto from 'crypto'
-import fs from 'fs'
 
 export default class App implements IApp {
   dir: string
@@ -10,6 +8,8 @@ export default class App implements IApp {
   id: string
   start_cmd: string
   auto_start: boolean
+  created_at: number
+  order: number
   hc: IHealthCheck
 
   constructor(props: IApp) {
@@ -19,10 +19,8 @@ export default class App implements IApp {
     this.start_cmd = props.start_cmd
     this.auto_start = props.auto_start
     this.hc = props.hc
-  }
-
-  hasDir(): boolean {
-    return !!this.dir && fs.existsSync(this.dir)
+    this.created_at = props.created_at || Date.now()
+    this.order = props.order
   }
 
   renderForStorage(): IAppInStorage {
@@ -33,6 +31,8 @@ export default class App implements IApp {
       start_cmd: this.start_cmd,
       auto_start: this.auto_start,
       hc: this.hc,
+      created_at: this.created_at,
+      order: this.order,
     }
   }
 

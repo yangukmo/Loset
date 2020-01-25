@@ -90,6 +90,8 @@ export default class IpcService {
       name: app.name,
       start_cmd: app.start_cmd,
       auto_start: app.auto_start,
+      created_at: Date.now(),
+      order: this.appManager.createNewOrder(),
       hc: app.hc,
     }))
 

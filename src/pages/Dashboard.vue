@@ -22,7 +22,7 @@
           <div>Control</div>
         </div>
         <app-item v-for="app of apps" :app="app" :key="app.id"/>
-        <not-found-apps v-if="!apps.length"/>
+        <not-found-apps v-if="isEmptyApps"/>
       </div>
     </section>
   </div>
@@ -49,13 +49,26 @@
     },
   })
   export default class Dashboard extends Vue {
-    apps: IAppInClient[] = []
+    private apps!: IAppInClient[]
+    private isLoading!: boolean
+
+    constructor() {
+      super();
+      this.apps = []
+      this.isLoading = false
+    }
 
     created() {
+      this.isLoading = true
       ipcRenderer.on(IPC_EVENT.APPS, (event, data) => {
         this.apps = data
+        this.isLoading = false
       })
       ipcRenderer.send(IPC_EVENT.APPS)
+    }
+
+    get isEmptyApps(): boolean {
+      return !this.apps.length && !this.isLoading
     }
 
     startApps() {

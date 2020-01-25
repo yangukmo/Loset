@@ -42,12 +42,13 @@ export default class StorageManager {
 
   updateApp(params: { id: string, name: string, start_cmd: string, auto_start: boolean, hc: { active: boolean, port: number, path: string, interval: number } }): void {
     const app = this.getApp(params)
-    this.storage.set(`${KEY.APPS}.${params.id}`, { ...app, ...params })
+    this.storage.set(`${KEY.APPS}.${params.id}`, { ...app, ...params, updated_at: Date.now() })
   }
 
-  updateConfig(params: any): void {
-    const config = this.getConfig()
-    this.storage.set(KEY.CONFIG, { ...config, ...params })
+  createNewOrder(): number {
+    const apps = this.getApps()
+
+    return Object.values(apps).reduce((newOrder, app) => ((app.order > newOrder) ? app.order : newOrder), 0) + 1
   }
 
   clear(): void {

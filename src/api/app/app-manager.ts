@@ -140,6 +140,14 @@ export default class AppManager {
   deleteOutput(id: string): void {
     this.apps[id].output_log.length = 0
   }
+
+  getActiveAppCount(): number {
+    return Object.values(this.apps).filter((app) => app.active).length
+  }
+
+  createNewOrder(): number {
+    return this.storageManager.createNewOrder()
+  }
 }
 
 interface IUpdateApp {

@@ -70,7 +70,7 @@ export class DynamicApp implements IDynamicApp {
 
     console.info('# Start App')
     this.process = exec(params.start_cmd, { cwd: params.dir, env, maxBuffer: 100 * 1024 * 1024 })
-    this.pid = process.pid
+    this.pid = this.process.pid
     this.active = true
     this.notificationFn()
     this.listenEvents()

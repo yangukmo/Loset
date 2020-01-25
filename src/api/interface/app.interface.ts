@@ -7,6 +7,8 @@ export interface IApp {
   id: string
   start_cmd: string
   auto_start: boolean
+  created_at: number
+  order: number
   hc: IHealthCheck
 }
 
@@ -16,6 +18,8 @@ export interface IAppInStorage {
   dir: string
   start_cmd: string
   auto_start: boolean
+  created_at: number
+  order: number
   hc: IHealthCheck
 }
 

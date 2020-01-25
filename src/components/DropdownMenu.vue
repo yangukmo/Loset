@@ -1,17 +1,17 @@
 <template>
   <section class="dropdown-menu-wrapper">
-    <div style="position: relative;">
+    <div class="dropdown-menu-area" ref="dropdown">
       <icon-button icon="ellipsis-v" @click.native="toggle"/>
 
       <transition name="fade" mode="out-in">
-        <ul class="dropdown-menu" v-if="isOpen">
-          <li class="item">
+        <ul class="dropdown-menu" v-if="isOpen" ref="menu">
+          <li class="item" ref="item">
             <icon-button icon="folder-open" content="Directory" @click.native="onClickButton('open-directory')"/>
           </li>
-          <li class="item">
+          <li class="item" ref="item">
             <icon-button icon="terminal" content="Terminal" @click.native="onClickButton('open-terminal')"/>
           </li>
-          <li class="item">
+          <li class="item" ref="item">
             <icon-button icon="trash" content="Delete" @click.native="onClickButton('delete-app')"/>
           </li>
         </ul>
@@ -38,38 +38,56 @@
 
     toggle(): void {
       this.isOpen = !this.isOpen
+
+      if (this.isOpen) {
+        document.addEventListener('click', this.onClickOutside)
+      } else {
+        document.removeEventListener('click', this.onClickOutside)
+      }
     }
 
     onClickButton(event: string): void {
       this.$emit(event)
+      this.toggle()
+    }
+
+    private onClickOutside(event: Event): void {
+      const dropdown: any = this.$refs.dropdown
+      if (!dropdown || dropdown.contains(event.target)) return
+      this.toggle()
     }
   }
 </script>
 
 <style lang="scss" scoped>
   .dropdown-menu-wrapper {
-    .dropdown-menu {
-      position: absolute;
-      z-index: 100;
-      background-color: rgba(9, 61, 76, 0.7);
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      right: 0;
-      top: 40px;
-      min-width: 100px;
-      border-radius: .25rem;
+    .dropdown-menu-area {
+      position: relative;
 
-      .item {
-        padding: .25rem 1rem;
+      .dropdown-menu {
+        background-color: #113650;
+        position: absolute;
+        z-index: 100;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        right: 0;
+        top: 40px;
+        min-width: 100px;
+        border-radius: .25rem;
+
+        .item {
+          padding: .25rem 1rem;
+        }
       }
-    }
 
-    .fade-enter-active, .fade-leave-active {
-      transition: opacity .3s;
-    }
-    .fade-enter, .fade-leave-to {
-      opacity: 0;
+      .fade-enter-active, .fade-leave-active {
+        transition: opacity .3s;
+      }
+
+      .fade-enter, .fade-leave-to {
+        opacity: 0;
+      }
     }
   }
 </style>

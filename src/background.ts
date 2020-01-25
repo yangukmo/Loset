@@ -6,12 +6,13 @@ import IpcListener from '@/api/ipc.listener'
 import IpcService from '@/api/ipc.service'
 import StorageManager from '@/api/store/storage-manager'
 import WindowManager from '@/api/window-mananger'
-import { app, BrowserWindow, protocol } from 'electron'
+import { MESSAGE } from '@/shared/enum/message'
+import { app, BrowserWindow, dialog, protocol } from 'electron'
 import ElectronStore from 'electron-store'
+import fixPath from 'fix-path'
 import 'reflect-metadata'
 import treeKill from 'tree-kill'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
-import fixPath from 'fix-path'
 
 const isDevelopment = (process.env.NODE_ENV !== 'production')
 fixPath()
@@ -54,6 +55,22 @@ function createWindow() {
   const hcManager = new HealthCheckManager()
   const ipcService = new IpcService(appManager, hcManager, windowManager)
   const ipcRouter = new IpcListener(ipcService)
+
+  win.on('close', async (event) => {
+    const activeAppCount = appManager.getActiveAppCount()
+    const message = MESSAGE.QUIT_LOSET + (activeAppCount ? `\n${activeAppCount} apps are working.` : '')
+
+    const { response } = await dialog.showMessageBox({
+      type: 'question',
+      buttons: ['Yes', 'No'],
+      title: 'Confirm',
+      message,
+    })
+
+    if (response === 1) {
+      event.preventDefault()
+    }
+  })
 
   win.on('closed', () => {
     win = null

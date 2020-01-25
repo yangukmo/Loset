@@ -19,6 +19,8 @@
 </script>
 
 <style lang="scss" scoped>
+  $disabledColor: #666;
+
   .icon-button {
     padding: .5rem;
     width: auto;
@@ -30,15 +32,15 @@
       background-color: transparent;
       color: #AAA;
 
-      &:hover > * {
+      &:enabled:hover > * {
         color: #FFF;
       }
 
       &:disabled {
-        color: #777;
+        color: $disabledColor;
 
         &:hover {
-          color: #777;
+          color: $disabledColor;
         }
       }
     }
