@@ -40,7 +40,7 @@ export default class StorageManager {
     this.storage.delete(`${KEY.APPS}.${params.id}`)
   }
 
-  updateApp(params: { id: string, name: string, start_cmd: string, auto_start: boolean, hc: { active: boolean, port: number, path: string, interval: number } }): void {
+  updateApp(params: { id: string, name: string, start_cmd: string, auto_start: boolean, hc: { active: boolean, port: number, path: string, interval: number }, theme: { color: string } }): void {
     const app = this.getApp(params)
     this.storage.set(`${KEY.APPS}.${params.id}`, { ...app, ...params, updated_at: Date.now() })
   }

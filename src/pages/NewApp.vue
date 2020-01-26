@@ -30,6 +30,12 @@
           </card>
 
           <card>
+            <input-label label="Color">
+              <compact-color-picker :value="color" @input="updateColor" class="color-picker"/>
+            </input-label>
+          </card>
+
+          <card>
             <input-label label="Auto Start">
               <checkbox v-model="auto_start" class="checkbox"/>
             </input-label>
@@ -104,6 +110,7 @@
     dir: string
     name: string
     start_cmd: string
+    color: string
     auto_start: boolean
     hc: IHealthCheck
 
@@ -113,6 +120,7 @@
       this.dir = ''
       this.name = ''
       this.start_cmd = ''
+      this.color = '#009CE0'
       this.auto_start = false
       this.hc = {
         active: false,
@@ -138,7 +146,6 @@
     }
 
     create(): void {
-      // TODO Input Validation
       ipcRenderer.sendSync(IPC_EVENT.CREATE_APP, {
         dir: this.dir,
         name: this.name,
@@ -150,12 +157,19 @@
           path: this.hc.active ? this.hc.path : undefined,
           interval: this.hc.active ? this.hc.interval : undefined,
         },
+        theme: {
+          color: this.color,
+        },
       })
       this.$router.push('/dashboard')
     }
 
     cancel(): void {
       this.$router.push('/dashboard')
+    }
+
+    updateColor(colors: { hex: string }): void {
+      this.color = colors.hex
     }
   }
 </script>
@@ -188,6 +202,7 @@
       margin-top: .75rem
     }
 
+    .color-picker,
     .checkbox {
       margin-top: .75rem;
     }

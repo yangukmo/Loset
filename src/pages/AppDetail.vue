@@ -26,6 +26,12 @@
           </card>
 
           <card>
+            <input-label label="Color">
+              <compact-color-picker :value="app.theme.color" @input="updateColor"/>
+            </input-label>
+          </card>
+
+          <card>
             <input-label label="Auto Start">
               <checkbox v-model="app.auto_start" class="checkbox"/>
             </input-label>
@@ -123,6 +129,7 @@
         start_cmd: this.app.start_cmd,
         auto_start: this.app.auto_start,
         hc: this.app.hc,
+        theme: this.app.theme,
       })
       this.$router.push('/dashboard')
     }
@@ -133,6 +140,10 @@
 
     destroyed(): void {
       this.removeEvents()
+    }
+
+    updateColor(colors: { hex: string }): void {
+      this.app.theme.color = colors.hex
     }
   }
 </script>

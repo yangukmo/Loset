@@ -3,6 +3,7 @@ import AppManager from '@/api/app/app-manager'
 import ConfigFile from '@/api/app/config-file'
 import HealthCheckManager from '@/api/hc/hc-manager'
 import HealthCheck2 from '@/api/hc/hc2'
+import { ITheme } from '@/api/interface/app.interface'
 import { ISelectDirectory } from '@/api/interface/ipc-service.interface'
 import WindowManager from '@/api/window-mananger'
 import { IPC_EVENT } from '@/shared/enum'
@@ -92,6 +93,7 @@ export default class IpcService {
       auto_start: app.auto_start,
       created_at: Date.now(),
       order: this.appManager.createNewOrder(),
+      theme: app.theme,
       hc: app.hc,
     }))
 
@@ -114,6 +116,7 @@ export default class IpcService {
       start_cmd: app.start_cmd,
       auto_start: app.auto_start,
       hc: app.hc,
+      theme: app.theme,
     })
   }
 
@@ -213,6 +216,7 @@ interface ICreateApp {
     path: string
     interval: number
   }
+  theme: ITheme
 }
 
 interface IUpdateApp {
@@ -225,5 +229,8 @@ interface IUpdateApp {
     port: number
     path: string
     interval: number
+  }
+  theme: {
+    color: string
   }
 }

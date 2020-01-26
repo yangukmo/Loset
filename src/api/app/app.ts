@@ -1,4 +1,4 @@
-import { IApp, IAppInStorage } from '@/api/interface/app.interface'
+import { IApp, IAppInStorage, ITheme } from '@/api/interface/app.interface'
 import { IHealthCheck } from '@/api/interface/health-check.interface'
 import crypto from 'crypto'
 
@@ -11,6 +11,7 @@ export default class App implements IApp {
   created_at: number
   order: number
   hc: IHealthCheck
+  theme: ITheme
 
   constructor(props: IApp) {
     this.dir = props.dir
@@ -21,6 +22,7 @@ export default class App implements IApp {
     this.hc = props.hc
     this.created_at = props.created_at || Date.now()
     this.order = props.order
+    this.theme = props.theme
   }
 
   renderForStorage(): IAppInStorage {
@@ -33,6 +35,7 @@ export default class App implements IApp {
       hc: this.hc,
       created_at: this.created_at,
       order: this.order,
+      theme: this.theme,
     }
   }
 

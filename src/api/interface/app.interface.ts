@@ -10,6 +10,7 @@ export interface IApp {
   created_at: number
   order: number
   hc: IHealthCheck
+  theme: ITheme
 }
 
 export interface IAppInStorage {
@@ -21,6 +22,11 @@ export interface IAppInStorage {
   created_at: number
   order: number
   hc: IHealthCheck
+  theme: ITheme
+}
+
+export interface ITheme {
+  color: string
 }
 
 export interface IAppInClient extends IAppInStorage, IDynamicApp {

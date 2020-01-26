@@ -1,5 +1,7 @@
 <template>
   <div v-show="isShowApp" id="app-item-wrapper">
+    <div class="color-bar" :style="barStyle"/>
+
     <section id="info">
       <article>
         <span class="name" v-text="app.name"/>
@@ -52,6 +54,10 @@
       return this.getKeyword ? this.app.name.toUpperCase().includes(this.getKeyword.toUpperCase()) : true
     }
 
+    get barStyle(): { backgroundColor: string } {
+      return { backgroundColor: this.app.theme.color }
+    }
+
     startApp(): void {
       ipcRenderer.send(IPC_EVENT.START_APP, this.app.id)
     }
@@ -83,6 +89,16 @@
     margin-bottom: .25rem;
     user-select: none;
     position: relative;
+
+    .color-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      border-top-left-radius: .25rem;
+      border-bottom-left-radius: .25rem;
+    }
 
     #info {
       display: grid;

@@ -65,6 +65,7 @@ export default class AppManager {
       start_cmd: app.start_cmd,
       auto_start: app.auto_start,
       hc: app.hc,
+      theme: app.theme,
     })
   }
 
@@ -161,5 +162,8 @@ interface IUpdateApp {
     port: number
     path: string
     interval: number
+  }
+  theme: {
+    color: string
   }
 }
