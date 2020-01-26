@@ -1,6 +1,6 @@
 <template>
   <section id="output" v-if="app">
-    <header>
+    <header :style="headerStyle">
       <section class="title">
         <span>{{ app.name }}</span>
       </section>
@@ -36,6 +36,12 @@
     constructor() {
       super()
       this.app = {} as IAppInClient
+    }
+
+    get headerStyle(): { backgroundColor: string } {
+      return {
+        backgroundColor: this.app.theme && this.app.theme.color,
+      }
     }
 
     created(): void {
@@ -82,15 +88,17 @@
     height: 100vh;
     display: grid;
     grid-template-areas: "title" "terminal";
-    grid-template-rows: 50px 1fr;
+    grid-template-rows: 40px 1fr;
 
     header {
       grid-area: title;
       color: #FFF;
       display: grid;
-      padding: 10px;
+      padding-left: .5rem;
+      padding-right: .5rem;
       grid-template-areas: "empty title control";
       grid-template-columns: 1fr 1fr 1fr;
+      -webkit-app-region: drag;
 
       .title {
         grid-area: title;
