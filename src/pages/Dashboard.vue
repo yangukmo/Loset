@@ -1,6 +1,10 @@
 <template>
   <div id="dashboard-wrapper">
     <section>
+      <card id="logo">
+        <img src="../images/logo/logo-white.svg" alt="logo"/>
+      </card>
+
       <card id="control">
         <icon-button icon="plus" to="/dashboard/new-app"/>
         <icon-button icon="play" @click.native="startApps"/>
@@ -99,10 +103,23 @@
     section {
       display: grid;
       grid-gap: 1rem;
-      grid-template-areas: "search control" "content content";
-      grid-template-columns: 1fr 170px;
+      grid-template-areas: "logo search control" "content content content";
+      grid-template-columns: 120px 1fr 150px;
       width: 100%;
       max-width: 1000px;
+
+      #logo {
+        grid-area: logo;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img {
+          width: 70px;
+          -webkit-user-drag: none;
+          user-select: none;
+        }
+      }
 
       #search {
         grid-area: search;

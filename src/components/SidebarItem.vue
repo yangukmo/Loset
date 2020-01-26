@@ -25,14 +25,6 @@
     line-height: 15px;
     user-select: none;
 
-    .icon {
-      /*cursor: pointer;*/
-    }
-
-    .name {
-      /*cursor: pointer;*/
-    }
-
     &.active {
       color: #FFF;
 

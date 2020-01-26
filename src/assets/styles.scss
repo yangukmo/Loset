@@ -32,6 +32,8 @@ input {
 }
 
 button {
+  $active-bg-color: rgba(112, 194, 232, 0.9);
+
   border: 0;
   background-color: rgba(14, 84, 105, 0.2);
   color: #CCC;
@@ -39,6 +41,12 @@ button {
   font-size: 14px;
   transition: background-color 300ms, color 300ms;
   user-select: none;
+  border-radius: .25rem;
+
+  &.active {
+    background-color: $active-bg-color;
+    color: #000;
+  }
 
   &:focus {
     outline: none;
@@ -48,7 +56,7 @@ button {
     color: #AAA;
 
     &:not(.no-bg) {
-      background-color: rgba(112, 194, 232, 0.9);
+      background-color: $active-bg-color;
       color: #000;
     }
   }

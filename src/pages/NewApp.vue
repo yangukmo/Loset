@@ -31,13 +31,13 @@
 
           <card>
             <input-label label="Auto Start">
-              <input type="checkbox" v-model="auto_start"/>
+              <checkbox v-model="auto_start" class="checkbox"/>
             </input-label>
           </card>
 
           <card>
             <input-label label="Health Check API">
-              <input type="checkbox" v-model="hc.active"/>
+              <checkbox v-model="hc.active" class="checkbox"/>
             </input-label>
           </card>
 
@@ -65,10 +65,10 @@
             </validation-provider>
           </card>
 
-          <div>
+          <button-group>
             <button @click="create" :disabled="invalid">Create</button>
             <button @click="cancel">Cancel</button>
-          </div>
+          </button-group>
         </form>
       </validation-observer>
     </section>
@@ -78,7 +78,9 @@
 <script lang="ts">
   import { IHealthCheck } from '@/api/interface/health-check.interface'
   import { ISelectDirectory } from '@/api/interface/ipc-service.interface'
+  import ButtonGroup from '@/components/ButtonGroup.vue'
   import Card from '@/components/Card.vue'
+  import Checkbox from '@/components/Checkbox.vue'
   import DirectorySelector from '@/components/DirectorySelector.vue'
   import IconButton from '@/components/IconButton.vue'
   import InputLabel from '@/components/InputLabel.vue'
@@ -94,6 +96,8 @@
       DirectorySelector,
       Card,
       IconButton,
+      Checkbox,
+      ButtonGroup,
     },
   })
   export default class NewApp extends Vue {
@@ -182,6 +186,10 @@
 
     .directory-selector {
       margin-top: .75rem
+    }
+
+    .checkbox {
+      margin-top: .75rem;
     }
   }
 </style>

@@ -1,22 +1,40 @@
 <template>
   <div id="checkbox-wrapper">
-    <button class="enable">{{ enableName }}</button>
-    <button class="disable">{{ disableName }}</button>
+    <button-group>
+      <button class="enable" :class="{ 'active': value }" @click="toggle">{{ truthy }}</button>
+      <button class="disable" :class="{ 'active': !value }" @click="toggle">{{ falsy }}</button>
+    </button-group>
   </div>
 </template>
 
 <script lang="ts">
+  import ButtonGroup from '@/components/ButtonGroup.vue'
   import { Component, Prop, Vue } from 'vue-property-decorator'
 
-  @Component
+  @Component({
+    components: {
+      ButtonGroup,
+    }
+  })
   export default class Checkbox extends Vue {
-    @Prop({ type: String, required: true, default: 'ENABLE' }) enableName!: string
-    @Prop({ type: String, required: true, default: 'DISABLE' }) disableName!: string
+    @Prop({ type: String, required: false, default: 'ENABLE' }) truthy!: string
+    @Prop({ type: String, required: false, default: 'DISABLE' }) falsy!: string
+    @Prop({ type: Boolean, required: true, default: false }) value!: boolean
+
+    constructor() {
+      super()
+    }
+
+    private toggle(): void {
+      this.$emit('input', !this.value)
+    }
   }
 </script>
 
 <style lang="scss" scoped>
   #checkbox-wrapper {
-
+    .hidden {
+      display: none;
+    }
   }
 </style>

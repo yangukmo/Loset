@@ -81,6 +81,7 @@ export default class AppManager {
   getApps(): IAppInClient[] {
     return Object.keys(this.apps)
       .map((id) => this.getApp(id))
+      .sort((a, b) => b.order - a.order)
   }
 
   hasApp(id: string): boolean {

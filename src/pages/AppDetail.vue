@@ -27,17 +27,17 @@
 
           <card>
             <input-label label="Auto Start">
-              <input type="checkbox" v-model="app.auto_start"/>
+              <checkbox v-model="app.auto_start" class="checkbox"/>
             </input-label>
           </card>
 
           <card>
             <input-label label="Health Check API">
-              <input type="checkbox" v-model="app.hc.active"/>
+              <checkbox v-model="app.hc.active" class="checkbox"/>
             </input-label>
           </card>
 
-          <card>
+          <card v-if="app.hc.active">
             <validation-provider rules="port" v-slot="{ errors }" tag="div" name="port">
               <input-label label="Port" :error-message="errors[0]">
                 <input type="number" placeholder="1~65535" v-model="app.hc.port" :disabled="!app.hc.active"/>
@@ -45,7 +45,7 @@
             </validation-provider>
           </card>
 
-          <card>
+          <card v-if="app.hc.active">
             <validation-provider rules="path|maxLength:50" v-slot="{ errors }" tag="div" name="path">
               <input-label label="Path" :error-message="errors[0]">
                 <input type="text" v-model="app.hc.path" placeholder="/hc" maxlength="50" :disabled="!app.hc.active"/>
@@ -53,7 +53,7 @@
             </validation-provider>
           </card>
 
-          <card>
+          <card v-if="app.hc.active">
             <validation-provider rules="interval" v-slot="{ errors }" tag="div" name="interval">
               <input-label label="Interval" :error-message="errors[0]">
                 <input type="number" v-model="app.hc.interval" placeholder="5000~60000" :disabled="!app.hc.active"/>
@@ -61,10 +61,10 @@
             </validation-provider>
           </card>
 
-          <div>
+          <button-group>
             <button @click="update" :disabled="invalid">Update</button>
             <button @click="back">Back</button>
-          </div>
+          </button-group>
         </form>
       </validation-observer>
     </section>
@@ -73,6 +73,7 @@
 
 <script lang="ts">
   import { IAppInClient } from '@/api/interface/app.interface'
+  import ButtonGroup from '@/components/ButtonGroup.vue'
   import Card from '@/components/Card.vue'
   import Checkbox from '@/components/Checkbox.vue'
   import DirectorySelector from '@/components/DirectorySelector.vue'
@@ -87,6 +88,7 @@
       DirectorySelector,
       Card,
       Checkbox,
+      ButtonGroup,
     },
   })
   export default class AppDetail extends Vue {
@@ -149,6 +151,10 @@
       .dir {
         color: #FFF;
         padding-top: .75rem;
+      }
+
+      .checkbox {
+        margin-top: .75rem;
       }
     }
   }

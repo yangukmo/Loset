@@ -12,7 +12,7 @@ import ElectronStore from 'electron-store'
 import fixPath from 'fix-path'
 import 'reflect-metadata'
 import treeKill from 'tree-kill'
-import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
+import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib'
 
 const isDevelopment = (process.env.NODE_ENV !== 'production')
 fixPath()
@@ -36,6 +36,7 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
     },
+    show: false,
   })
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
@@ -58,17 +59,18 @@ function createWindow() {
 
   win.on('close', async (event) => {
     const activeAppCount = appManager.getActiveAppCount()
-    const message = MESSAGE.QUIT_LOSET + (activeAppCount ? `\n${activeAppCount} apps are working.` : '')
 
-    const { response } = await dialog.showMessageBox({
-      type: 'question',
-      buttons: ['Yes', 'No'],
-      title: 'Confirm',
-      message,
-    })
+    if (activeAppCount > 0) {
+      const { response } = await dialog.showMessageBox({
+        type: 'question',
+        buttons: ['Yes', 'No'],
+        title: 'Confirm',
+        message: MESSAGE.QUIT_LOSET + `\n${activeAppCount} apps are working.`,
+      })
 
-    if (response === 1) {
-      event.preventDefault()
+      if (response === 1) {
+        event.preventDefault()
+      }
     }
   })
 
@@ -79,6 +81,10 @@ function createWindow() {
     appManager.stopApps()
     windowManager.closeChildWindows()
     treeKill(process.pid)
+  })
+
+  win.once('ready-to-show', () => {
+    (win as BrowserWindow).show()
   })
 }
 
@@ -110,11 +116,11 @@ app.on('ready', async () => {
     // Electron will not launch with Devtools extensions installed on Windows 10 with dark mode
     // If you are not using Windows 10 dark mode, you may uncomment these lines
     // In addition, if the linked issue is closed, you can upgrade electron and uncomment these lines
-    // try {
-    //   await installVueDevtools()
-    // } catch (e) {
-    //   console.error('Vue Devtools failed to install:', e.toString())
-    // }
+    try {
+      await installVueDevtools()
+    } catch (e) {
+      console.error('Vue Devtools failed to install:', e.toString())
+    }
 
   }
   createWindow()

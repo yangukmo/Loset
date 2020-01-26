@@ -6,9 +6,6 @@
         <sidebar-item icon="cog" name="Settings" to="/settings"/>
       </ul>
     </section>
-    <section class="area-logo">
-      <img src="../images/logo/logo-white.svg" id="img-logo" alt="logo" class="no-select" @click="openLink"/>
-    </section>
   </nav>
 </template>
 
@@ -36,19 +33,6 @@
     background-color: rgba(0, 0, 0, .2);
     display: grid;
     grid-template-rows: 1fr 50px;
-
-    .area-logo {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      #img-logo {
-        width: 45px;
-        -webkit-user-drag: none;
-        user-select: none;
-        /*cursor: pointer;*/
-      }
-    }
 
     .area-menu {
       display: flex;
