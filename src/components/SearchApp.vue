@@ -1,11 +1,12 @@
 <template>
   <div>
-    <input id="keyword" type="text" placeholder="Search App..." :value="getKeyword" @input="inputKeyword"/>
+    <input id="keyword" type="text" :placeholder="placeholder" :value="getKeyword" @input="inputKeyword"
+           :disabled="disabled"/>
   </div>
 </template>
 
 <script lang="ts">
-  import { Component, Vue } from 'vue-property-decorator'
+  import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
   import { mapActions, mapGetters } from 'vuex'
 
   @Component({
@@ -13,10 +14,30 @@
     computed: mapGetters('searchApp', ['getKeyword']),
   })
   export default class SearchApp extends Vue {
-    private setKeyword!: any
+    @Prop({ type: Boolean, required: false, default: false }) disabled!: boolean
+    private setKeyword!: (keyword: string) => void
+    private placeholder!: string
+
+    constructor() {
+      super()
+      this.placeholder = ''
+    }
+
+    @Watch('disabled', { immediate: true })
+    onChangeDisabled(): void {
+      this.changePlaceholder()
+    }
 
     inputKeyword(e: any): void {
       this.setKeyword(e.target.value)
+    }
+
+    private changePlaceholder(): void {
+      if (this.disabled) {
+        this.placeholder = 'Please register a new App.'
+      } else {
+        this.placeholder = 'Search App...'
+      }
     }
   }
 </script>

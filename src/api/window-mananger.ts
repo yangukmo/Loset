@@ -1,5 +1,6 @@
 import { IPC_EVENT } from '@/shared/enum'
 import { BrowserWindow } from 'electron'
+import windowStateKeeper from 'electron-window-state'
 
 export default class WindowManager {
   private readonly childWindows: { [id: string]: BrowserWindow }
@@ -25,11 +26,18 @@ export default class WindowManager {
       return
     }
 
+    const childWindowState = windowStateKeeper({
+      defaultWidth: 1000,
+      defaultHeight: 500,
+    })
+
     const isDev = (process.env.NODE_ENV === 'development')
     const winURL = isDev ? `${process.env.WEBPACK_DEV_SERVER_URL}/#/output/${id}` : `app://./index.html#output/${id}`
     const childWindow = new BrowserWindow({
-      height: 500,
-      width: 1000,
+      width: childWindowState.width,
+      height: childWindowState.height,
+      x: childWindowState.x,
+      y: childWindowState.y,
       alwaysOnTop: false,
       title: 'Devy',
       titleBarStyle: 'customButtonsOnHover',
@@ -42,6 +50,8 @@ export default class WindowManager {
     childWindow.on('closed', () => {
       delete this.childWindows[id]
     })
+
+    childWindowState.manage(childWindow)
 
     this.childWindows[id] = childWindow
   }

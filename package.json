@@ -20,6 +20,7 @@
     "@fortawesome/vue-fontawesome": "^0.1.9",
     "core-js": "^3.6.4",
     "electron-store": "^5.1.0",
+    "electron-window-state": "^5.0.3",
     "fix-path": "^2.1.0",
     "glob": "^7.1.6",
     "is-port-reachable": "^3.0.0",

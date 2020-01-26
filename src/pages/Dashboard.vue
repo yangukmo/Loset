@@ -7,13 +7,13 @@
 
       <card id="control">
         <icon-button icon="plus" to="/dashboard/new-app"/>
-        <icon-button icon="play" @click.native="startApps"/>
-        <icon-button icon="stop" @click.native="stopApps"/>
-        <icon-button icon="trash" @click.native="deleteApps"/>
+        <icon-button icon="play" @click.native="startApps" :disabled="isEmptyApps"/>
+        <icon-button icon="stop" @click.native="stopApps" :disabled="isEmptyApps"/>
+        <icon-button icon="trash" @click.native="deleteApps" :disabled="isEmptyApps"/>
       </card>
 
       <card id="search">
-        <search-app/>
+        <search-app :disabled="isEmptyApps"/>
       </card>
 
       <div id="content">
@@ -57,7 +57,7 @@
     private isLoading!: boolean
 
     constructor() {
-      super();
+      super()
       this.apps = []
       this.isLoading = false
     }

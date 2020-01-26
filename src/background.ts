@@ -13,6 +13,7 @@ import fixPath from 'fix-path'
 import 'reflect-metadata'
 import treeKill from 'tree-kill'
 import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib'
+import windowStateKeeper from 'electron-window-state'
 
 const isDevelopment = (process.env.NODE_ENV !== 'production')
 fixPath()
@@ -25,11 +26,17 @@ let win: BrowserWindow | null
 protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true, standard: true } }])
 
 function createWindow() {
+  const mainWindowState = windowStateKeeper({
+    defaultWidth: 1000,
+    defaultHeight: 700,
+  })
   // Create the browser window.
   win = new BrowserWindow({
-    width: 1000,
     minWidth: 800,
-    height: 600,
+    width: mainWindowState.width,
+    height: mainWindowState.height,
+    x: mainWindowState.x,
+    y: mainWindowState.y,
     title: 'Loset',
     titleBarStyle: 'customButtonsOnHover',
     backgroundColor: '#081B26',
@@ -86,6 +93,8 @@ function createWindow() {
   win.once('ready-to-show', () => {
     (win as BrowserWindow).show()
   })
+
+  mainWindowState.manage(win)
 }
 
 // Quit when all windows are closed.
