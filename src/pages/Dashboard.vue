@@ -18,6 +18,7 @@
 
       <div id="content">
         <div class="title">
+          <div/>
           <div>Name</div>
           <div>PID</div>
           <div>Status</div>
@@ -25,7 +26,10 @@
           <div>Auto Start</div>
           <div>Control</div>
         </div>
-        <app-item v-for="app of apps" :app="app" :key="app.id"/>
+
+        <draggable :list="apps" handle=".handle" @end="onEndDrag">
+          <app-item v-for="app of apps" :app="app" :key="app.id"/>
+        </draggable>
         <not-found-apps v-if="isEmptyApps"/>
       </div>
     </section>
@@ -42,6 +46,7 @@
   import { IPC_EVENT } from '@/shared/enum'
   import { ipcRenderer } from 'electron'
   import { Component, Vue } from 'vue-property-decorator'
+  import Draggable from 'vuedraggable'
 
   @Component({
     components: {
@@ -50,6 +55,7 @@
       Card,
       SearchApp,
       IconButton,
+      Draggable,
     },
   })
   export default class Dashboard extends Vue {
@@ -89,6 +95,11 @@
 
     destroyed() {
       ipcRenderer.removeAllListeners(IPC_EVENT.APPS)
+    }
+
+    onEndDrag(): void {
+      const sortedAppIdList = this.apps.map((app) => app.id)
+      ipcRenderer.send(IPC_EVENT.UPDATE_APPS_ORDER, sortedAppIdList)
     }
   }
 </script>
@@ -140,7 +151,7 @@
 
         .title {
           display: grid;
-          grid-template-columns: 1fr 1fr 1fr 1fr 1fr 120px;
+          grid-template-columns: 30px 1fr 1fr 1fr 1fr 1fr 120px;
           margin-bottom: 10px;
           font-size: 14px;
           font-weight: 600;

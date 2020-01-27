@@ -4,6 +4,9 @@
 
     <section id="info">
       <article>
+        <font-awesome-icon icon="grip-lines" class="handle"/>
+      </article>
+      <article>
         <span class="name" v-text="app.name"/>
       </article>
       <article>
@@ -102,7 +105,7 @@
 
     #info {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 120px;
+      grid-template-columns: 30px 1fr 1fr 1fr 1fr 1fr 120px;
 
       article {
         display: flex;
@@ -112,6 +115,14 @@
 
       .name {
         font-weight: 600;
+      }
+
+      .handle {
+        cursor: grab;
+
+        &:active {
+          cursor: grabbing;
+        }
       }
     }
   }

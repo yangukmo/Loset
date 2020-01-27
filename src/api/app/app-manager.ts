@@ -69,6 +69,12 @@ export default class AppManager {
     })
   }
 
+  updateAppsOrder(sortedAppIdList: string[]): void {
+    sortedAppIdList.forEach((id, order) => {
+      this.storageManager.updateAppOrder({ id, order })
+    })
+  }
+
   getApp(id: string): IAppInClient {
     const appInStorage = this.storageManager.getApp({ id })
     const dynamicApp = this.apps[id]
@@ -82,7 +88,7 @@ export default class AppManager {
   getApps(): IAppInClient[] {
     return Object.keys(this.apps)
       .map((id) => this.getApp(id))
-      .sort((a, b) => b.order - a.order)
+      .sort((a, b) => a.order - b.order)
   }
 
   hasApp(id: string): boolean {

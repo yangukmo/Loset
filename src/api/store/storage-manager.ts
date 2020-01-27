@@ -45,6 +45,11 @@ export default class StorageManager {
     this.storage.set(`${KEY.APPS}.${params.id}`, { ...app, ...params, updated_at: Date.now() })
   }
 
+  updateAppOrder(params: { id: string, order: number }): void {
+    const app = this.getApp(params)
+    this.storage.set(`${KEY.APPS}.${params.id}`, { ...app, order: params.order, updated_at: Date.now() })
+  }
+
   createNewOrder(): number {
     const apps = this.getApps()
 

@@ -120,6 +120,10 @@ export default class IpcService {
     })
   }
 
+  updateAppsOrder = (event: IpcMainEvent, sortedAppIdList: string[]): void => {
+    this.appManager.updateAppsOrder(sortedAppIdList)
+  }
+
   deleteApps = async (event: IpcMainEvent): Promise<void> => {
     const { response } = await dialog.showMessageBox(this.windowManager.getWindow(), {
       buttons: ['Delete', 'Cancel'],

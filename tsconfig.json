@@ -15,7 +15,8 @@
     "baseUrl": ".",
     "types": [
       "webpack-env",
-      "@types/node"
+      "@types/node",
+      "./src/shard/types"
     ],
     "paths": {
       "@/*": [
