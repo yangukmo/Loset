@@ -4,7 +4,7 @@
       <form>
         <card>
           <input-label label="Auto Start">
-            <input type="checkbox"/>
+            <checkbox v-model="config.auto_start" class="checkbox"/>
           </input-label>
         </card>
       </form>
@@ -14,6 +14,7 @@
 
 <script lang="ts">
   import Card from '@/components/Card.vue'
+  import Checkbox from '@/components/Checkbox.vue'
   import InputLabel from '@/components/InputLabel.vue'
   import { Component, Vue } from 'vue-property-decorator'
 
@@ -21,10 +22,16 @@
     components: {
       Card,
       InputLabel,
+      Checkbox,
     },
   })
   export default class Settings extends Vue {
     private config!: any
+
+    constructor() {
+      super()
+      this.config = {}
+    }
   }
 </script>
 
@@ -38,6 +45,10 @@
     section.settings-content {
       width: 100%;
       max-width: 500px;
+
+      .checkbox {
+        margin-top: .75rem;
+      }
     }
   }
 </style>

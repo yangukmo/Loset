@@ -105,7 +105,7 @@
 
     #info {
       display: grid;
-      grid-template-columns: 30px 1fr 1fr 1fr 1fr 1fr 120px;
+      grid-template-columns: 30px 1fr 1fr 1fr 1fr 1fr 105px;
 
       article {
         display: flex;
@@ -118,9 +118,11 @@
       }
 
       .handle {
+        color: #AAA;
         cursor: grab;
 
         &:active {
+          color: #FFF;
           cursor: grabbing;
         }
       }

@@ -1,6 +1,6 @@
 <template>
   <router-link tag="button" :to="to" class="icon-button" :class="{ 'no-bg': !bg }" :disabled="disabled">
-    <font-awesome-icon :icon="icon" class="icon"/>
+    <font-awesome-icon :icon="icon" class="icon" v-if="icon"/>
     <span class="content" v-if="content">{{ content }}</span>
   </router-link>
 </template>
@@ -10,7 +10,7 @@
 
   @Component
   export default class IconButton extends Vue {
-    @Prop({ type: String, required: true, default: '' }) icon!: string
+    @Prop({ type: String, required: false, default: '' }) icon!: string
     @Prop({ type: String, required: false, default: '' }) to!: string
     @Prop({ type: Boolean, required: false, default: false }) bg!: boolean
     @Prop({ type: Boolean, required: false, default: false }) disabled!: boolean

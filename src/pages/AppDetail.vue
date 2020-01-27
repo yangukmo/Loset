@@ -68,8 +68,8 @@
           </card>
 
           <button-group>
-            <button @click="update" :disabled="invalid">Update</button>
-            <button @click="back">Back</button>
+            <button type="button" @click="update" :disabled="invalid">Update</button>
+            <button type="button" @click="back">Back</button>
           </button-group>
         </form>
       </validation-observer>

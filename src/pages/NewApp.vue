@@ -72,8 +72,8 @@
           </card>
 
           <button-group>
-            <button @click="create" :disabled="invalid">Create</button>
-            <button @click="cancel">Cancel</button>
+            <button type="button" @click="create" :disabled="invalid">Create</button>
+            <button type="button" @click="cancel">Cancel</button>
           </button-group>
         </form>
       </validation-observer>

@@ -1,8 +1,8 @@
 <template>
   <div id="checkbox-wrapper">
     <button-group>
-      <button class="enable" :class="{ 'active': value }" @click="toggle">{{ truthy }}</button>
-      <button class="disable" :class="{ 'active': !value }" @click="toggle">{{ falsy }}</button>
+      <button type="button" class="enable" :class="{ 'active': value }" @click="toggle">{{ truthy }}</button>
+      <button type="button" class="disable" :class="{ 'active': !value }" @click="toggle">{{ falsy }}</button>
     </button-group>
   </div>
 </template>
