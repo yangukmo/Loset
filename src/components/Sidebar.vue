@@ -30,7 +30,7 @@
   nav {
     color: #FFF;
     height: 100vh;
-    background-color: rgba(0, 0, 0, .2);
+    background-color: rgba(0, 0, 0, .5);
     display: grid;
     grid-template-rows: 1fr 50px;
 
