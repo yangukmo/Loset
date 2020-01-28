@@ -88,7 +88,7 @@
     color: #FFF;
     background-color: rgba(14, 84, 105, 0.2);
     border-radius: .25rem;
-    padding: .75rem 1rem;
+    padding: .65rem 1rem;
     margin-bottom: .25rem;
     user-select: none;
     position: relative;
