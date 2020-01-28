@@ -27,8 +27,8 @@ export default class WindowManager {
     }
 
     const childWindowState = windowStateKeeper({
-      defaultWidth: 1000,
-      defaultHeight: 500,
+      defaultWidth: 700,
+      defaultHeight: 400,
     })
 
     const isDev = (process.env.NODE_ENV === 'development')
@@ -36,12 +36,14 @@ export default class WindowManager {
     const childWindow = new BrowserWindow({
       width: childWindowState.width,
       height: childWindowState.height,
+      minWidth: 400,
+      minHeight: 300,
       x: childWindowState.x,
       y: childWindowState.y,
       alwaysOnTop: false,
-      title: 'Devy',
+      title: 'Loset',
       titleBarStyle: 'customButtonsOnHover',
-      backgroundColor: '#081B26',
+      backgroundColor: '#000',
       webPreferences: {
         nodeIntegration: true
       }

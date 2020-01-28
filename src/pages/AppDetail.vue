@@ -39,7 +39,7 @@
 
           <card>
             <input-label label="Health Check API">
-              <checkbox v-model="app.hc.active" class="checkbox"/>
+              <checkbox v-model="app.hc.active" class="checkbox" :disabled="true"/>
             </input-label>
           </card>
 

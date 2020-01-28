@@ -1,8 +1,8 @@
 <template>
   <section id="output" v-if="app">
-    <header :style="headerStyle">
+    <header>
       <section class="title">
-        <span>{{ app.name }}</span>
+        <span :style="nameStyle">{{ app.name }}</span>
       </section>
       <section class="control">
         <icon-button icon="trash" @click.native="deleteOutput()"/>
@@ -38,9 +38,11 @@
       this.app = {} as IAppInClient
     }
 
-    get headerStyle(): { backgroundColor: string } {
+    get nameStyle(): { borderBottom: string } {
+      const color = this.app.theme?.color
+
       return {
-        backgroundColor: this.app.theme && this.app.theme.color,
+        borderBottom: `2px solid ${color}`,
       }
     }
 
@@ -88,7 +90,8 @@
     height: 100vh;
     display: grid;
     grid-template-areas: "title" "terminal";
-    grid-template-rows: 40px 1fr;
+    grid-template-rows: 50px 1fr;
+    background-color: #000;
 
     header {
       grid-area: title;
@@ -108,6 +111,7 @@
 
         span {
           font-size: 16px;
+          user-select: none;
         }
       }
 
@@ -122,7 +126,6 @@
     #area-terminal {
       padding: 0 .5rem;
       grid-area: terminal;
-      background-color: #000;
     }
   }
 </style>

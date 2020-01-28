@@ -4,7 +4,7 @@
       <form>
         <card>
           <input-label label="Auto Start">
-            <checkbox v-model="config.auto_start" class="checkbox"/>
+            <checkbox v-model="config.auto_start" class="checkbox" :disabled="true"/>
           </input-label>
         </card>
       </form>

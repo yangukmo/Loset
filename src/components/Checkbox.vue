@@ -1,8 +1,8 @@
 <template>
   <div id="checkbox-wrapper">
     <button-group>
-      <button type="button" class="enable" :class="{ 'active': value }" @click="toggle">{{ truthy }}</button>
-      <button type="button" class="disable" :class="{ 'active': !value }" @click="toggle">{{ falsy }}</button>
+      <button type="button" class="enable" :class="{ 'active': value }" @click="toggle" :disabled="disabled">{{ truthy }}</button>
+      <button type="button" class="disable" :class="{ 'active': !value }" @click="toggle" :disabled="disabled">{{ falsy }}</button>
     </button-group>
   </div>
 </template>
@@ -20,6 +20,7 @@
     @Prop({ type: String, required: false, default: 'ENABLE' }) truthy!: string
     @Prop({ type: String, required: false, default: 'DISABLE' }) falsy!: string
     @Prop({ type: Boolean, required: true, default: false }) value!: boolean
+    @Prop({ type: Boolean, required: false, default: false }) disabled!: boolean
 
     constructor() {
       super()
