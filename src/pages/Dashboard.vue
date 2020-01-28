@@ -2,7 +2,7 @@
   <div id="dashboard-wrapper">
     <section>
       <card id="logo">
-        <img src="../images/logo/logo-white.svg" alt="logo"/>
+        <img src="../images/logo/logo.svg" alt="logo"/>
       </card>
 
       <card id="control">
