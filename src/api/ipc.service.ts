@@ -20,11 +20,11 @@ export default class IpcService {
   }
 
   getApp = (event: IpcMainEvent, id: string): void => {
-    event.sender.send(IPC_EVENT.APP, this.appManager.getApp(id))
+    event.sender.send(IPC_EVENT.GET_APP, this.appManager.getApp(id))
   }
 
   getApps = (event: IpcMainEvent): void => {
-    event.sender.send(IPC_EVENT.APPS, this.appManager.getApps())
+    event.sender.send(IPC_EVENT.GET_APPS, this.appManager.getApps())
   }
 
   selectDirectory = (event: IpcMainEvent): void => {
@@ -135,7 +135,7 @@ export default class IpcService {
     }
 
     this.appManager.deleteApps()
-    event.sender.send(IPC_EVENT.APPS, this.appManager.getApps())
+    event.sender.send(IPC_EVENT.GET_APPS, this.appManager.getApps())
   }
 
   startApp = (event: IpcMainEvent, id: string): void => {
@@ -147,7 +147,7 @@ export default class IpcService {
     }
 
     this.appManager.startApp(id)
-    event.sender.send(IPC_EVENT.APPS, this.appManager.getApps())
+    event.sender.send(IPC_EVENT.GET_APPS, this.appManager.getApps())
   }
 
   startApps = (): void => {
@@ -163,10 +163,19 @@ export default class IpcService {
     }
 
     this.appManager.stopApp(id)
-    event.sender.send(IPC_EVENT.APPS, this.appManager.getApps())
+    event.sender.send(IPC_EVENT.GET_APPS, this.appManager.getApps())
   }
 
-  stopApps = (): void => {
+  stopApps = async (): Promise<void> => {
+    const { response } = await dialog.showMessageBox(this.windowManager.getWindow(), {
+      buttons: ['Yes', 'No'],
+      message: MESSAGE.STOP_APPS
+    })
+
+    if (response === 1) {
+      return
+    }
+
     this.appManager.stopApps()
   }
 
@@ -188,7 +197,7 @@ export default class IpcService {
     }
 
     this.appManager.deleteApp(id)
-    event.sender.send(IPC_EVENT.APPS, this.appManager.getApps())
+    event.sender.send(IPC_EVENT.GET_APPS, this.appManager.getApps())
   }
 
   openOutputWindow = (event: IpcMainEvent, id: string): void => {

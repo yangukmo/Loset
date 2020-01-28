@@ -56,7 +56,7 @@
 
     listenEvents(): void {
       ipcRenderer
-        .once(IPC_EVENT.APP, (event, data) => {
+        .once(IPC_EVENT.GET_APP, (event, data) => {
           this.app = data
         })
         .on(IPC_EVENT.GET_ALL_OUTPUT, (event, data: Buffer[]) => {
@@ -67,7 +67,7 @@
         })
 
       ipcRenderer.send(IPC_EVENT.GET_ALL_OUTPUT, this.id)
-      ipcRenderer.send(IPC_EVENT.APP, this.id)
+      ipcRenderer.send(IPC_EVENT.GET_APP, this.id)
     }
 
     deleteOutput(): void {
@@ -76,7 +76,7 @@
     }
 
     destroyed(): void {
-      ipcRenderer.removeAllListeners(IPC_EVENT.APP)
+      ipcRenderer.removeAllListeners(IPC_EVENT.GET_APP)
       ipcRenderer.removeAllListeners(IPC_EVENT.OUTPUT)
       ipcRenderer.removeAllListeners(IPC_EVENT.GET_ALL_OUTPUT)
       EventBus.$off(this.eventBusOutputName)

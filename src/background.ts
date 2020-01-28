@@ -9,11 +9,11 @@ import WindowManager from '@/api/window-mananger'
 import { MESSAGE } from '@/shared/enum/message'
 import { app, BrowserWindow, dialog, protocol } from 'electron'
 import ElectronStore from 'electron-store'
+import windowStateKeeper from 'electron-window-state'
 import fixPath from 'fix-path'
 import 'reflect-metadata'
 import treeKill from 'tree-kill'
 import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib'
-import windowStateKeeper from 'electron-window-state'
 
 const isDevelopment = (process.env.NODE_ENV !== 'production')
 fixPath()
@@ -25,7 +25,7 @@ let win: BrowserWindow | null
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true, standard: true } }])
 
-function createWindow() {
+function createWindow(): void {
   const mainWindowState = windowStateKeeper({
     defaultWidth: 1000,
     defaultHeight: 700,

@@ -71,7 +71,7 @@
             </validation-provider>
           </card>
 
-          <button-group>
+          <button-group class="button-group">
             <button type="button" @click="create" :disabled="invalid">Create</button>
             <button type="button" @click="cancel">Cancel</button>
           </button-group>
@@ -205,6 +205,11 @@
     .color-picker,
     .checkbox {
       margin-top: .75rem;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: flex-end;
     }
   }
 </style>

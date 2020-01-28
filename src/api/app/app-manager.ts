@@ -99,7 +99,7 @@ export default class AppManager {
     const app = this.storageManager.getApp({ id })
     const dynamicApp = this.apps[id]
 
-    dynamicApp.registerNotificationFn(() => this.windowManager.sendMessage(IPC_EVENT.APPS, this.getApps()))
+    dynamicApp.registerNotificationFn(() => this.windowManager.sendMessage(IPC_EVENT.GET_APPS, this.getApps()))
     dynamicApp.registerOutputFn((data: Buffer) => this.windowManager.sendOutput({ id, data }))
     dynamicApp.start({
       start_cmd: app.start_cmd,

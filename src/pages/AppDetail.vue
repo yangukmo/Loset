@@ -67,7 +67,7 @@
             </validation-provider>
           </card>
 
-          <button-group>
+          <button-group class="button-group">
             <button type="button" @click="update" :disabled="invalid">Update</button>
             <button type="button" @click="back">Back</button>
           </button-group>
@@ -112,14 +112,14 @@
     }
 
     listenEvents(): void {
-      ipcRenderer.once(IPC_EVENT.APP, (event, data) => {
+      ipcRenderer.once(IPC_EVENT.GET_APP, (event, data) => {
         this.app = data
       })
-      ipcRenderer.send(IPC_EVENT.APP, this.id)
+      ipcRenderer.send(IPC_EVENT.GET_APP, this.id)
     }
 
     removeEvents(): void {
-      ipcRenderer.removeAllListeners(IPC_EVENT.APP)
+      ipcRenderer.removeAllListeners(IPC_EVENT.GET_APP)
     }
 
     update(): void {
@@ -166,6 +166,11 @@
 
       .checkbox {
         margin-top: .75rem;
+      }
+
+      .button-group {
+        display: flex;
+        justify-content: flex-end;
       }
     }
   }

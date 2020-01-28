@@ -1,4 +1,9 @@
-import { IDynamicApp, IDynamicAppConstructor, IStartDynamicApp } from '@/api/interface/dynamic-app.interface'
+import {
+  IDynamicApp,
+  IDynamicAppConstructor,
+  IRenderForClient,
+  IStartDynamicApp,
+} from '@/api/interface/dynamic-app.interface'
 import { ChildProcess, exec } from 'child_process'
 import readline, { Interface } from 'readline'
 import ProcessEnv = NodeJS.ProcessEnv
@@ -55,7 +60,7 @@ export class DynamicApp implements IDynamicApp {
     this.error_log.push(data)
   }
 
-  renderForClient(): any {
+  renderForClient(): IRenderForClient {
     return {
       id: this.id,
       active: this.active,

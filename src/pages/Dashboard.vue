@@ -68,33 +68,45 @@
       this.isLoading = false
     }
 
-    created() {
+    created(): void {
       this.isLoading = true
-      ipcRenderer.on(IPC_EVENT.APPS, (event, data) => {
+      ipcRenderer.on(IPC_EVENT.GET_APPS, (event, data) => {
         this.apps = data
         this.isLoading = false
       })
-      ipcRenderer.send(IPC_EVENT.APPS)
+      ipcRenderer.send(IPC_EVENT.GET_APPS)
+    }
+
+    get hasActiveApps(): boolean {
+      return this.apps.some((app) => app.active)
     }
 
     get isEmptyApps(): boolean {
       return !this.apps.length && !this.isLoading
     }
 
-    startApps() {
+    startApps(): void {
       ipcRenderer.send(IPC_EVENT.START_APPS)
     }
 
-    stopApps() {
+    stopApps(): void {
+      if (!this.hasActiveApps) {
+        return
+      }
+
       ipcRenderer.send(IPC_EVENT.STOP_APPS)
     }
 
-    deleteApps() {
+    deleteApps(): void {
+      if (this.isEmptyApps) {
+        return
+      }
+
       ipcRenderer.send(IPC_EVENT.DELETE_APPS)
     }
 
-    destroyed() {
-      ipcRenderer.removeAllListeners(IPC_EVENT.APPS)
+    destroyed(): void {
+      ipcRenderer.removeAllListeners(IPC_EVENT.GET_APPS)
     }
 
     onEndDrag(): void {

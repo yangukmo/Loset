@@ -12,3 +12,9 @@ export interface IStartDynamicApp {
   start_cmd: string
   dir: string
 }
+
+export interface IRenderForClient {
+  id: string
+  active: boolean
+  pid: number
+}
