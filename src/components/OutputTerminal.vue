@@ -49,6 +49,7 @@
     destroyed(): void {
       EventBus.$off(this.eventBusOutputName)
       EventBus.$off(this.eventBusDeleteOutputName)
+      window.removeEventListener('resize', () => {})
     }
   }
 </script>

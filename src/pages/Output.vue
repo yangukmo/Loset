@@ -90,7 +90,7 @@
     height: 100vh;
     display: grid;
     grid-template-areas: "title" "terminal";
-    grid-template-rows: 50px 1fr;
+    grid-template-rows: 40px 1fr;
     background-color: #000;
 
     header {
@@ -127,5 +127,11 @@
       padding: 0 .5rem;
       grid-area: terminal;
     }
+  }
+</style>
+
+<style lang="scss">
+  body {
+    background-color: #000 !important;
   }
 </style>
