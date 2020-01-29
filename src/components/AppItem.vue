@@ -105,7 +105,7 @@
 
     #info {
       display: grid;
-      grid-template-columns: 30px 1fr 1fr 1fr 1fr 1fr 105px;
+      grid-template-columns: 30px 2fr 1fr 1fr 1fr 1fr 105px;
 
       article {
         display: flex;

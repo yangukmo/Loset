@@ -163,7 +163,7 @@
 
         .title {
           display: grid;
-          grid-template-columns: 30px 1fr 1fr 1fr 1fr 1fr 105px;
+          grid-template-columns: 30px 2fr 1fr 1fr 1fr 1fr 105px;
           margin-bottom: 10px;
           font-size: 14px;
           font-weight: 600;
