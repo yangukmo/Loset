@@ -6,6 +6,7 @@ import {
 } from '@/api/interface/dynamic-app.interface'
 import { ChildProcess, exec } from 'child_process'
 import readline, { Interface } from 'readline'
+import treeKill from 'tree-kill'
 import ProcessEnv = NodeJS.ProcessEnv
 
 export class DynamicApp implements IDynamicApp {
@@ -84,7 +85,7 @@ export class DynamicApp implements IDynamicApp {
   stop(): void {
     if (this.process && this.pid) {
       console.info('# Stop App')
-      this.process.kill('SIGTERM')
+      treeKill(this.pid)
       this.pid = 0
       this.active = false
       this.removeEvents()
