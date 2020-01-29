@@ -16,7 +16,7 @@
   .card {
     background-color: rgba(14, 84, 105, 0.2);
     border-radius: .25rem;
-    padding: .65rem;
+    padding: .65rem 1rem;
     margin-bottom: .75rem;
   }
 </style>

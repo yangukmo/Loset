@@ -71,10 +71,10 @@
             </validation-provider>
           </card>
 
-          <button-group class="button-group">
-            <button type="button" @click="create" :disabled="invalid">Create</button>
-            <button type="button" @click="cancel">Cancel</button>
-          </button-group>
+          <div class="button-group">
+            <button type="button" class="negative" @click="cancel">Cancel</button>
+            <button type="button" class="primary" @click="create" :disabled="invalid">Create</button>
+          </div>
         </form>
       </validation-observer>
     </section>
@@ -84,7 +84,6 @@
 <script lang="ts">
   import { IHealthCheck } from '@/api/interface/health-check.interface'
   import { ISelectDirectory } from '@/api/interface/ipc-service.interface'
-  import ButtonGroup from '@/components/ButtonGroup.vue'
   import Card from '@/components/Card.vue'
   import Checkbox from '@/components/Checkbox.vue'
   import DirectorySelector from '@/components/DirectorySelector.vue'
@@ -103,7 +102,6 @@
       Card,
       IconButton,
       Checkbox,
-      ButtonGroup,
     },
   })
   export default class NewApp extends Vue {
@@ -208,8 +206,18 @@
     }
 
     .button-group {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
       display: flex;
+      align-items: center;
       justify-content: flex-end;
+      padding: .75rem 1rem;
+
+      button {
+        margin: 0 .25rem;
+      }
     }
   }
 </style>

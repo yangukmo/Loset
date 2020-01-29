@@ -9,7 +9,6 @@
 
   @Component
   export default class ButtonGroup extends Vue {
-
   }
 </script>
 

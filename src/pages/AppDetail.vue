@@ -67,10 +67,10 @@
             </validation-provider>
           </card>
 
-          <button-group class="button-group">
-            <button type="button" @click="update" :disabled="invalid">Update</button>
-            <button type="button" @click="back">Back</button>
-          </button-group>
+          <div class="button-group">
+            <button type="button" class="negative" @click="back">Back</button>
+            <button type="button" class="primary" @click="update" :disabled="invalid">Update</button>
+          </div>
         </form>
       </validation-observer>
     </section>
@@ -79,7 +79,6 @@
 
 <script lang="ts">
   import { IAppInClient } from '@/api/interface/app.interface'
-  import ButtonGroup from '@/components/ButtonGroup.vue'
   import Card from '@/components/Card.vue'
   import Checkbox from '@/components/Checkbox.vue'
   import DirectorySelector from '@/components/DirectorySelector.vue'
@@ -94,7 +93,6 @@
       DirectorySelector,
       Card,
       Checkbox,
-      ButtonGroup,
     },
   })
   export default class AppDetail extends Vue {
@@ -154,10 +152,12 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    position: relative;
 
     section.app-detail-content {
       width: 100%;
       max-width: 500px;
+      margin-bottom: 50px;
 
       .dir {
         color: #FFF;
@@ -169,8 +169,18 @@
       }
 
       .button-group {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
         display: flex;
+        align-items: center;
         justify-content: flex-end;
+        padding: .75rem 1rem;
+
+        button {
+          margin: 0 .25rem;
+        }
       }
     }
   }

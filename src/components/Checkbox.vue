@@ -34,8 +34,15 @@
 
 <style lang="scss" scoped>
   #checkbox-wrapper {
-    .hidden {
-      display: none;
+    button {
+      font-size: 12px;
+
+      &:enabled.disable {
+        &.active, &:hover {
+          background-color: rgba(140, 140, 140, .7);
+          color: #FFF;
+        }
+      }
     }
   }
 </style>

@@ -3,6 +3,12 @@ $green: #72BE47;
 $yellow: #FFB63C;
 $blue: #22C4D6;
 
+$default-color: rgba(14, 84, 105, .2);
+$primary-color: rgba(22, 222, 255, .6);
+$primary-active-color: rgba(34, 196, 214, .9);
+$negative-active-color: rgba(45, 78, 93, .9);
+$disabled-color: rgba(50, 50, 50, .2);
+
 .no-select {
   user-select: none;
 }
@@ -32,10 +38,8 @@ input {
 }
 
 button {
-  $active-bg-color: rgba(112, 194, 232, 0.9);
-
   border: 0;
-  background-color: rgba(14, 84, 105, 0.2);
+  background-color: $default-color;
   color: #CCC;
   padding: .5rem .75rem;
   font-size: 14px;
@@ -43,9 +47,18 @@ button {
   user-select: none;
   border-radius: .25rem;
 
+  &.primary {
+    background-color: $primary-color;
+  }
+
+  &.negative:enabled:hover {
+    background-color: $negative-active-color !important;
+    color: #FFF !important;
+  }
+
   &.active {
-    background-color: $active-bg-color;
-    color: #000;
+    background-color: $primary-active-color;
+    color: #FFF;
   }
 
   &:focus {
@@ -56,13 +69,13 @@ button {
     color: #AAA;
 
     &:not(.no-bg) {
-      background-color: $active-bg-color;
-      color: #000;
+      background-color: $primary-active-color;
+      color: #FFF;
     }
   }
 
   &:disabled {
-    background-color: rgba(50, 50, 50, 0.2);
+    background-color: $disabled-color;
     color: #AAA;
   }
 
@@ -71,7 +84,7 @@ button {
     color: #AAA;
 
     &:not(.no-bg) {
-      background-color: rgba(50, 50, 50, 0.2);
+      background-color: $disabled-color;
     }
   }
 }
