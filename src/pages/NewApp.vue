@@ -1,6 +1,10 @@
 <template>
   <div id="new-app-wrapper">
-    <section>
+    <section class="close-wrapper">
+      <icon-button icon="times" id="btn-close" to="/dashboard"/>
+    </section>
+
+    <section class="app-detail-content">
       <validation-observer v-slot="{ invalid }">
         <form>
           <card>
@@ -41,7 +45,7 @@
             </input-label>
           </card>
 
-          <card>
+          <card class="hidden">
             <input-label label="Health Check API">
               <checkbox v-model="hc.active" class="checkbox" :disabled="true"/>
             </input-label>
@@ -71,10 +75,7 @@
             </validation-provider>
           </card>
 
-          <div class="button-group">
-            <button type="button" class="negative" @click="cancel">Cancel</button>
-            <button type="button" class="primary" @click="create" :disabled="invalid">Create</button>
-          </div>
+          <button type="button" class="primary block" @click="create" :disabled="invalid || !dir">Create</button>
         </form>
       </validation-observer>
     </section>
@@ -162,10 +163,6 @@
       this.$router.push('/dashboard')
     }
 
-    cancel(): void {
-      this.$router.push('/dashboard')
-    }
-
     updateColor(colors: { hex: string }): void {
       this.color = colors.hex
     }
@@ -179,44 +176,34 @@
     align-items: center;
     justify-content: center;
 
-    section {
-      width: 100%;
-      max-width: 500px;
-    }
+    section.close-wrapper {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
 
-    .wrapper-dir {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: .75rem;
-
-      .dir {
-        flex-grow: 9;
-        color: #FFF;
+      #btn-close {
+        font-size: 20px;
       }
     }
 
-    .directory-selector {
-      margin-top: .75rem
-    }
+    section.app-detail-content {
+      width: 100%;
+      max-width: 500px;
 
-    .color-picker,
-    .checkbox {
-      margin-top: .75rem;
-    }
+      .wrapper-dir {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: .75rem;
 
-    .button-group {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      padding: .75rem 1rem;
+        .dir {
+          flex-grow: 9;
+          color: #FFF;
+        }
+      }
 
-      button {
-        margin: 0 .25rem;
+      .color-picker, .checkbox, .directory-selector {
+        margin-top: .75rem;
       }
     }
   }

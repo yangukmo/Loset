@@ -1,5 +1,9 @@
 <template>
   <div id="app-detail-wrapper">
+    <section class="close-wrapper">
+      <icon-button icon="times" id="btn-close" to="/dashboard"/>
+    </section>
+
     <section class="app-detail-content">
       <validation-observer v-slot="{ invalid }">
         <form v-if="app.id">
@@ -37,7 +41,7 @@
             </input-label>
           </card>
 
-          <card>
+          <card class="hidden">
             <input-label label="Health Check API">
               <checkbox v-model="app.hc.active" class="checkbox" :disabled="true"/>
             </input-label>
@@ -67,10 +71,7 @@
             </validation-provider>
           </card>
 
-          <div class="button-group">
-            <button type="button" class="negative" @click="back">Back</button>
-            <button type="button" class="primary" @click="update" :disabled="invalid">Update</button>
-          </div>
+          <button type="button" class="primary block" @click="update" :disabled="invalid">Update</button>
         </form>
       </validation-observer>
     </section>
@@ -82,6 +83,7 @@
   import Card from '@/components/Card.vue'
   import Checkbox from '@/components/Checkbox.vue'
   import DirectorySelector from '@/components/DirectorySelector.vue'
+  import IconButton from '@/components/IconButton.vue'
   import InputLabel from '@/components/InputLabel.vue'
   import { IPC_EVENT } from '@/shared/enum'
   import { ipcRenderer } from 'electron'
@@ -93,6 +95,7 @@
       DirectorySelector,
       Card,
       Checkbox,
+      IconButton,
     },
   })
   export default class AppDetail extends Vue {
@@ -132,10 +135,6 @@
       this.$router.push('/dashboard')
     }
 
-    back(): void {
-      this.$router.push('/dashboard')
-    }
-
     destroyed(): void {
       this.removeEvents()
     }
@@ -154,6 +153,16 @@
     justify-content: center;
     position: relative;
 
+    section.close-wrapper {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+
+      #btn-close {
+        font-size: 20px;
+      }
+    }
+
     section.app-detail-content {
       width: 100%;
       max-width: 500px;
@@ -161,26 +170,11 @@
 
       .dir {
         color: #FFF;
-        padding-top: .75rem;
+        margin-top: .75rem;
       }
 
       .checkbox {
         margin-top: .75rem;
-      }
-
-      .button-group {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        padding: .75rem 1rem;
-
-        button {
-          margin: 0 .25rem;
-        }
       }
     }
   }

@@ -1,19 +1,20 @@
 <template>
   <div id="dashboard-wrapper">
     <section>
-      <card id="logo">
+      <card id="logo" :bg="false">
         <img src="../images/logo/logo.svg" alt="logo"/>
       </card>
 
-      <card id="control">
+      <card id="search" :bg="false">
+        <search-app :disabled="isEmptyApps"/>
+      </card>
+
+      <card id="control" :bg="false">
         <icon-button icon="plus" to="/dashboard/new-app"/>
         <icon-button icon="play" @click.native="startApps" :disabled="isEmptyApps"/>
         <icon-button icon="stop" @click.native="stopApps" :disabled="isEmptyApps"/>
         <icon-button icon="trash" @click.native="deleteApps" :disabled="isEmptyApps"/>
-      </card>
-
-      <card id="search">
-        <search-app :disabled="isEmptyApps"/>
+        <icon-button icon="cog" to="/settings"/>
       </card>
 
       <div id="content">
@@ -22,7 +23,7 @@
           <div>Name</div>
           <div>PID</div>
           <div>Status</div>
-          <div>Health Check</div>
+          <div class="hidden">Health Check</div>
           <div>Auto Start</div>
           <div>Control</div>
         </div>
@@ -127,9 +128,9 @@
       display: grid;
       grid-gap: 1rem;
       grid-template-areas: "logo search control" "content content content";
-      grid-template-columns: 120px 1fr 150px;
+      grid-template-columns: 100px 1fr 180px;
       width: 100%;
-      max-width: 1000px;
+      max-width: 800px;
 
       #logo {
         grid-area: logo;
@@ -160,10 +161,11 @@
 
       #content {
         grid-area: content;
+        margin-bottom: 3rem;
 
         .title {
           display: grid;
-          grid-template-columns: 30px 2fr 1fr 1fr 1fr 1fr 105px;
+          grid-template-columns: 30px 2fr 1fr 1fr 1fr 80px;
           margin-bottom: 10px;
           font-size: 14px;
           font-weight: 600;

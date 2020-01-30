@@ -15,7 +15,7 @@
       <article>
         <status :active="app.active"/>
       </article>
-      <article>
+      <article class="hidden">
         <status :active="app.hc.active"/>
       </article>
       <article>
@@ -24,8 +24,7 @@
       <article class="control">
         <icon-button class="start" icon="play" @click.native="startApp" :disabled="app.active"/>
         <icon-button class="stop" icon="stop" @click.native="stopApp"/>
-        <dropdown-menu @open-directory="openDirectory" @open-terminal="openOutputWindow" @delete-app="deleteApp"/>
-        <icon-button class="detail" icon="chevron-right" :to="'/dashboard/apps/' + app.id"/>
+        <dropdown-menu @open-directory="openDirectory" @open-terminal="openOutputWindow" @delete-app="deleteApp" :id="app.id"/>
       </article>
     </section>
   </div>
@@ -105,7 +104,7 @@
 
     #info {
       display: grid;
-      grid-template-columns: 30px 2fr 1fr 1fr 1fr 1fr 105px;
+      grid-template-columns: 30px 2fr 1fr 1fr 1fr 80px;
 
       article {
         display: flex;

@@ -14,7 +14,7 @@ $disabled-color: rgba(50, 50, 50, .2);
 }
 
 .wrapper {
-  padding: 1rem;
+  padding: 1rem 2rem;
 }
 
 input {
@@ -46,6 +46,10 @@ button {
   transition: background-color 300ms, color 300ms;
   user-select: none;
   border-radius: .25rem;
+
+  &.block {
+    width: 100%;
+  }
 
   &.primary {
     background-color: $primary-color;
@@ -92,4 +96,8 @@ button {
 .vc-compact {
   background-color: transparent;
   padding: 0;
+}
+
+.hidden {
+  display: none !important;
 }

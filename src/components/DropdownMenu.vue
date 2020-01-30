@@ -9,7 +9,10 @@
             <icon-button icon="folder-open" content="Directory" @click.native="onClickButton('open-directory')"/>
           </li>
           <li class="item" ref="item">
-            <icon-button icon="terminal" content="Terminal" @click.native="onClickButton('open-terminal')"/>
+            <icon-button icon="terminal" content="Logs" @click.native="onClickButton('open-terminal')"/>
+          </li>
+          <li class="item" ref="item">
+            <icon-button icon="edit" content="Edit" :to="'/dashboard/apps/' + id"/>
           </li>
           <li class="item" ref="item">
             <icon-button icon="trash" content="Delete" @click.native="onClickButton('delete-app')"/>
@@ -22,12 +25,13 @@
 
 <script lang="ts">
   import IconButton from '@/components/IconButton.vue'
-  import { Component, Vue } from 'vue-property-decorator'
+  import { Component, Prop, Vue } from 'vue-property-decorator'
 
   @Component({
     components: { IconButton },
   })
   export default class DropdownMenu extends Vue {
+    @Prop({ type: String, required: true }) id!: string
     private isOpen!: boolean
 
     constructor() {

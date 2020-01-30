@@ -1,5 +1,7 @@
 <template>
-  <router-view/>
+  <section id="app">
+    <router-view class="wrapper"/>
+  </section>
 </template>
 
 <script lang="ts">
@@ -36,6 +38,14 @@
   }
 </script>
 
+<style lang="scss" scoped>
+  #app {
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+</style>
+
 <style lang="scss">
   body {
     background-color: #0e0037;
@@ -44,6 +54,10 @@
     background-size: cover;
     background-position: center center;
     background-repeat: repeat;
+
+    #app {
+      margin-top: 10px;
+    }
 
     .toasted-container {
       .toasted {

@@ -1,15 +1,23 @@
 <template>
-  <div>
-    <input id="keyword" type="text" :placeholder="placeholder" :value="getKeyword" @input="inputKeyword"
-           :disabled="disabled"/>
-  </div>
+  <article>
+    <section class="input-wrapper">
+      <input id="keyword" type="text" :placeholder="placeholder" :value="getKeyword" @input="inputKeyword"
+             :disabled="disabled"/>
+    </section>
+
+    <section class="clear-wrapper" v-show="getKeyword">
+      <icon-button icon="times" id="btn-clear" @click.native="clear"/>
+    </section>
+  </article>
 </template>
 
 <script lang="ts">
+  import IconButton from '@/components/IconButton.vue'
   import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
   import { mapActions, mapGetters } from 'vuex'
 
   @Component({
+    components: { IconButton },
     methods: mapActions('searchApp', ['setKeyword']),
     computed: mapGetters('searchApp', ['getKeyword']),
   })
@@ -32,6 +40,10 @@
       this.setKeyword(e.target.value)
     }
 
+    clear(): void {
+      this.setKeyword('')
+    }
+
     private changePlaceholder(): void {
       if (this.disabled) {
         this.placeholder = 'Please register a new App.'
@@ -43,7 +55,18 @@
 </script>
 
 <style lang="scss" scoped>
-  div, #keyword {
+  article {
     width: 100%;
+    position: relative;
+
+    .clear-wrapper {
+      position: absolute;
+      right: 0;
+      top: 5px;
+
+      #btn-clear {
+        font-size: 16px;
+      }
+    }
   }
 </style>

@@ -16,13 +16,10 @@ import treeKill from 'tree-kill'
 import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib'
 
 const isDevelopment = (process.env.NODE_ENV !== 'production')
-fixPath()
-
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
 let win: BrowserWindow | null
 
-// Scheme must be registered before the app is ready
+fixPath()
+
 protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true, standard: true } }])
 
 function createWindow(): void {
@@ -30,9 +27,9 @@ function createWindow(): void {
     defaultWidth: 1000,
     defaultHeight: 700,
   })
-  // Create the browser window.
+
   win = new BrowserWindow({
-    minWidth: 800,
+    minWidth: 600,
     width: mainWindowState.width,
     height: mainWindowState.height,
     x: mainWindowState.x,
@@ -47,12 +44,10 @@ function createWindow(): void {
   })
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
-    // Load the url of the dev server if in development mode
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
     if (!process.env.IS_TEST) win.webContents.openDevTools()
   } else {
     createProtocol('app')
-    // Load the index.html when not in development
     win.loadURL('app://./index.html')
   }
 
@@ -140,7 +135,7 @@ app.setAboutPanelOptions({
   applicationVersion: process.env.npm_package_version,
   iconPath: '',
   version: '',
-  website: process.env.npm_package_homepate,
+  website: process.env.npm_package_homepage,
 })
 
 // Exit cleanly on request from parent process in development mode.
