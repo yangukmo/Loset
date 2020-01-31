@@ -5,6 +5,8 @@
     </section>
 
     <section class="app-detail-content">
+      <h1 class="title no-select">Create a new app</h1>
+
       <validation-observer v-slot="{ invalid }">
         <form>
           <card>
@@ -189,6 +191,11 @@
     section.app-detail-content {
       width: 100%;
       max-width: 500px;
+
+      .title {
+        color: #FFF;
+        font-weight: 300;
+      }
 
       .wrapper-dir {
         display: flex;

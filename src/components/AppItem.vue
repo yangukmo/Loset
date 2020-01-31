@@ -89,7 +89,6 @@
     border-radius: .25rem;
     padding: .65rem 1rem;
     margin-bottom: .25rem;
-    user-select: none;
     position: relative;
 
     .color-bar {

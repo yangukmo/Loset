@@ -5,6 +5,8 @@
     </section>
 
     <section class="settings-content">
+      <h1 class="title no-select">Settings</h1>
+
       <form>
         <card>
           <input-label label="Auto Start">
@@ -62,6 +64,11 @@
     section.settings-content {
       width: 100%;
       max-width: 500px;
+
+      .title {
+        color: #FFF;
+        font-weight: 300;
+      }
 
       .checkbox {
         margin-top: .75rem;

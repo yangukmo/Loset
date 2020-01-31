@@ -5,7 +5,7 @@
         <span :style="nameStyle">{{ app.name }}</span>
       </section>
       <section class="control">
-        <icon-button icon="trash" @click.native="deleteOutput()"/>
+        <icon-button icon="eraser" @click.native="deleteOutput()"/>
       </section>
     </header>
     <article id="area-terminal">
@@ -92,6 +92,7 @@
     grid-template-areas: "title" "terminal";
     grid-template-rows: 40px 1fr;
     background-color: #000;
+    box-sizing: border-box;
 
     header {
       grid-area: title;

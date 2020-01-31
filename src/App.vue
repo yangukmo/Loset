@@ -55,10 +55,6 @@
     background-position: center center;
     background-repeat: repeat;
 
-    #app {
-      margin-top: 10px;
-    }
-
     .toasted-container {
       .toasted {
         &.success {

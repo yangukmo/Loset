@@ -5,6 +5,8 @@
     </section>
 
     <section class="app-detail-content">
+      <h1 class="title no-select">Edit the {{ appName }} app</h1>
+
       <validation-observer v-slot="{ invalid }">
         <form v-if="app.id">
           <card>
@@ -101,10 +103,12 @@
   export default class AppDetail extends Vue {
     private app!: IAppInClient
     private id!: string
+    private appName!: string
 
     constructor() {
       super()
       this.app = {} as IAppInClient
+      this.appName = ''
     }
 
     created(): void {
@@ -115,6 +119,7 @@
     listenEvents(): void {
       ipcRenderer.once(IPC_EVENT.GET_APP, (event, data) => {
         this.app = data
+        this.appName = this.app.name
       })
       ipcRenderer.send(IPC_EVENT.GET_APP, this.id)
     }
@@ -167,6 +172,11 @@
       width: 100%;
       max-width: 500px;
       margin-bottom: 50px;
+
+      .title {
+        color: #FFF;
+        font-weight: 300;
+      }
 
       .dir {
         color: #FFF;
