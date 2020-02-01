@@ -1,4 +1,5 @@
 import { IPC_EVENT } from '@/shared/enum'
+import { MESSAGE_EVENT } from '@/shared/enum/message'
 import { BrowserWindow } from 'electron'
 import windowStateKeeper from 'electron-window-state'
 
@@ -11,7 +12,7 @@ export default class WindowManager {
     this.childWindows = {}
   }
 
-  sendMessage<T>(event: IPC_EVENT, message: T): void {
+  sendMessage<T>(event: IPC_EVENT | MESSAGE_EVENT, message: T): void {
     this.window.isDestroyed() || this.window.webContents.send(event, message)
   }
 

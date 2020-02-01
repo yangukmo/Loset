@@ -10,4 +10,5 @@ export enum MESSAGE {
   DELETE_APP = 'Do you want to delete this app?',
   QUIT_LOSET = 'Are you sure you want to quit?',
   STOP_APPS = 'Do you want to stop all apps?',
+  NOT_FOUND_COMMAND = 'Command not found.<br/>Please edit the command.',
 }

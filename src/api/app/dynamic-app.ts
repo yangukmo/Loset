@@ -4,6 +4,7 @@ import {
   IRenderForClient,
   IStartDynamicApp,
 } from '@/api/interface/dynamic-app.interface'
+import { MESSAGE, MESSAGE_EVENT } from '@/shared/enum/message'
 import { ChildProcess, exec } from 'child_process'
 import readline, { Interface } from 'readline'
 import treeKill from 'tree-kill'
@@ -16,8 +17,9 @@ export class DynamicApp implements IDynamicApp {
   error_log: Buffer[]
   process: ChildProcess | undefined
   pid: number
-  private notificationFn: () => void
-  private outputFn: (data: Buffer) => void
+  private syncAppsFn!: () => void
+  private notificationFn!: (event: MESSAGE_EVENT, data: MESSAGE) => void
+  private outputFn!: (data: Buffer) => void
   private stdout: Interface | undefined
   private stderr: Interface | undefined
   private env: ProcessEnv
@@ -28,24 +30,34 @@ export class DynamicApp implements IDynamicApp {
     this.output_log = []
     this.error_log = []
     this.pid = 0
-    this.notificationFn = () => {}
-    this.outputFn = () => {}
     this.env = process.env
-
     delete this.env.NODE_ENV
+
+    this.unregisterSyncAppsFn()
+    this.unregisterNotificationFn()
+    this.unregisterOutputFn()
   }
 
-  registerNotificationFn(fn: () => void): void {
+  registerSyncAppsFn(fn: () => void): void {
+    this.syncAppsFn = fn
+  }
+
+  registerNotificationFn(fn: (event: MESSAGE_EVENT, data: MESSAGE) => void): void {
     this.notificationFn = fn
+  }
+
+  registerOutputFn(fn: (data: Buffer) => void): void {
+    this.outputFn = fn
+  }
+
+  unregisterSyncAppsFn(): void {
+    this.syncAppsFn = () => {
+    }
   }
 
   unregisterNotificationFn(): void {
     this.notificationFn = () => {
     }
-  }
-
-  registerOutputFn(fn: (data: Buffer) => void): void {
-    this.outputFn = fn
   }
 
   unregisterOutputFn(): void {
@@ -78,7 +90,7 @@ export class DynamicApp implements IDynamicApp {
     this.process = exec(params.start_cmd, { cwd: params.dir, env, maxBuffer: 100 * 1024 * 1024 })
     this.pid = this.process.pid
     this.active = true
-    this.notificationFn()
+    this.syncAppsFn()
     this.listenEvents()
   }
 
@@ -89,7 +101,7 @@ export class DynamicApp implements IDynamicApp {
       this.pid = 0
       this.active = false
       this.removeEvents()
-      this.notificationFn()
+      this.syncAppsFn()
       this.output_log = []
     }
   }
@@ -116,9 +128,18 @@ export class DynamicApp implements IDynamicApp {
       this.process = undefined
       this.pid = 0
       this.active = false
-      this.notificationFn()
+      this.syncAppsFn()
       this.outputFn(data)
+      this.checkAndNotifyError(data)
     })
+  }
+
+  private checkAndNotifyError(data: any): void {
+    switch (data) {
+      case 127:
+        this.notificationFn(MESSAGE_EVENT.ERROR, MESSAGE.NOT_FOUND_COMMAND)
+        break
+    }
   }
 
   private removeEvents(): void {

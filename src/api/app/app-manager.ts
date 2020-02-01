@@ -1,9 +1,10 @@
 import App from '@/api/app/app'
 import { DynamicApp } from '@/api/app/dynamic-app'
-import { IAppInClient, IAppInStorage } from '@/api/interface/app.interface'
+import { IAppInClient, IAppInStorage, IUpdateApp } from '@/api/interface/app.interface'
 import StorageManager from '@/api/store/storage-manager'
 import WindowManager from '@/api/window-mananger'
 import { IPC_EVENT } from '@/shared/enum'
+import { MESSAGE, MESSAGE_EVENT } from '@/shared/enum/message'
 import fs from 'fs'
 
 export default class AppManager {
@@ -44,11 +45,7 @@ export default class AppManager {
   addApp(app: App): void {
     const { id } = app
 
-    if (this.hasApp(id)) { // TODO 이미 존재하는 앱
-      return
-    }
-
-    this.apps[id] = new DynamicApp({ id: app.id })
+    this.apps[id] = new DynamicApp({ id })
     this.storageManager.createApp(app.renderForStorage())
   }
 
@@ -99,7 +96,8 @@ export default class AppManager {
     const app = this.storageManager.getApp({ id })
     const dynamicApp = this.apps[id]
 
-    dynamicApp.registerNotificationFn(() => this.windowManager.sendMessage(IPC_EVENT.GET_APPS, this.getApps()))
+    dynamicApp.registerSyncAppsFn(() => this.windowManager.sendMessage(IPC_EVENT.GET_APPS, this.getApps()))
+    dynamicApp.registerNotificationFn((event: MESSAGE_EVENT, data: MESSAGE) => this.windowManager.sendMessage(event, data))
     dynamicApp.registerOutputFn((data: Buffer) => this.windowManager.sendOutput({ id, data }))
     dynamicApp.start({
       start_cmd: app.start_cmd,
@@ -115,6 +113,7 @@ export default class AppManager {
 
   stopApp(id: string): void {
     const dynamicApp = this.apps[id]
+    dynamicApp.unregisterSyncAppsFn()
     dynamicApp.unregisterNotificationFn()
     dynamicApp.unregisterOutputFn()
     dynamicApp.stop()
@@ -155,21 +154,5 @@ export default class AppManager {
 
   createNewOrder(): number {
     return this.storageManager.createNewOrder()
-  }
-}
-
-interface IUpdateApp {
-  id: string
-  name: string
-  start_cmd: string
-  auto_start: boolean
-  hc: {
-    active: boolean
-    port: number
-    path: string
-    interval: number
-  }
-  theme: {
-    color: string
   }
 }

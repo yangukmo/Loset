@@ -31,3 +31,19 @@ export interface ITheme {
 
 export interface IAppInClient extends IAppInStorage, IDynamicApp {
 }
+
+export interface IUpdateApp {
+  id: string
+  name: string
+  start_cmd: string
+  auto_start: boolean
+  hc: {
+    active: boolean
+    port: number
+    path: string
+    interval: number
+  }
+  theme: {
+    color: string
+  }
+}
