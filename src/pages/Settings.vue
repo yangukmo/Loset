@@ -13,6 +13,14 @@
             <checkbox v-model="config.auto_start" class="checkbox" :disabled="true"/>
           </input-label>
         </card>
+
+        <card>
+          <input-label label="Contact">
+            <button type="button" class="block" @click="openGithub" id="btn-github">
+              <font-awesome-icon :icon="['fab', 'github']" class="icon"/> Go to Github
+            </button>
+          </input-label>
+        </card>
       </form>
     </section>
   </div>
@@ -23,6 +31,7 @@
   import Checkbox from '@/components/Checkbox.vue'
   import IconButton from '@/components/IconButton.vue'
   import InputLabel from '@/components/InputLabel.vue'
+  import { shell } from 'electron'
   import { Component, Vue } from 'vue-property-decorator'
 
   @Component({
@@ -39,6 +48,10 @@
     constructor() {
       super()
       this.config = {}
+    }
+
+    openGithub(): void {
+      shell.openExternal('https://github.com/yangukmo/Loset/issues')
     }
   }
 </script>
@@ -70,8 +83,14 @@
         font-weight: 300;
       }
 
-      .checkbox {
+      .checkbox, #btn-github {
         margin-top: .75rem;
+      }
+
+      #btn-github {
+        .icon {
+          margin-right: .25rem;
+        }
       }
     }
   }
