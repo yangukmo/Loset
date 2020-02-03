@@ -34,7 +34,7 @@ function createWindow(): void {
     height: mainWindowState.height,
     x: mainWindowState.x,
     y: mainWindowState.y,
-    title: 'Loset',
+    title: app.getName(),
     titleBarStyle: 'customButtonsOnHover',
     backgroundColor: '#081B26',
     webPreferences: {
