@@ -12,7 +12,12 @@ module.exports = {
   },
   pluginOptions: {
     electronBuilder: {
-      mainProcessWatch: glob.sync('./src/api/**/*.ts')
+      mainProcessWatch: glob.sync('./src/api/**/*.ts'),
+      builderOptions: {
+        mac: {
+          icon: 'src/images/logo/loset-icon.png'
+        }
+      }
     }
   }
 }

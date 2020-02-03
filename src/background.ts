@@ -12,6 +12,7 @@ import ElectronStore from 'electron-store'
 import windowStateKeeper from 'electron-window-state'
 import fixPath from 'fix-path'
 import 'reflect-metadata'
+import path from 'path'
 import treeKill from 'tree-kill'
 import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib'
 
@@ -41,6 +42,7 @@ function createWindow(): void {
       nodeIntegration: true,
     },
     show: false,
+    icon: path.join(__dirname, 'images/logo/loset-icon.png'),
   })
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
@@ -133,7 +135,7 @@ app.on('ready', async () => {
 app.setAboutPanelOptions({
   applicationName: process.env.npm_package_productName,
   applicationVersion: process.env.npm_package_version,
-  iconPath: '',
+  iconPath: path.join(__dirname, 'images/logo/loset-icon.png'),
   version: '',
   website: process.env.npm_package_homepage,
 })
