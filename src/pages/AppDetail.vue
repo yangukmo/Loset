@@ -8,7 +8,7 @@
       <h1 class="title no-select">Edit the {{ appName }} app</h1>
 
       <validation-observer v-slot="{ invalid }">
-        <form v-if="app.id">
+        <form v-if="app.id" @submit="update">
           <card>
             <input-label label="Directory">
               <span class="dir" v-text="app.dir"/>
@@ -73,7 +73,7 @@
             </validation-provider>
           </card>
 
-          <button type="button" class="primary block" @click="update" :disabled="invalid">Update</button>
+          <button type="submit" class="primary block" @click="update" :disabled="invalid">Update</button>
         </form>
       </validation-observer>
     </section>

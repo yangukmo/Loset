@@ -8,7 +8,7 @@
       <h1 class="title no-select">Create a new app</h1>
 
       <validation-observer v-slot="{ invalid }">
-        <form>
+        <form @submit="create">
           <card>
             <input-label label="Directory">
               <div class="wrapper-dir" v-if="dir">
@@ -77,7 +77,7 @@
             </validation-provider>
           </card>
 
-          <button type="button" class="primary block" @click="create" :disabled="invalid || !dir">Create</button>
+          <button type="submit" class="primary block" @click="create" :disabled="invalid || !dir">Create</button>
         </form>
       </validation-observer>
     </section>
@@ -129,6 +129,10 @@
         path: '',
         interval: 5000,
       }
+    }
+
+    test() {
+      console.log('# 1111111111111111111111', 1111111111111111111111)
     }
 
     selectedDir(config: ISelectDirectory): void {

@@ -15,7 +15,7 @@ module.exports = {
       mainProcessWatch: glob.sync('./src/api/**/*.ts'),
       builderOptions: {
         mac: {
-          icon: 'src/images/logo/loset-icon.png'
+          icon: 'src/images/logo/loset-icon-border.png'
         }
       }
     }

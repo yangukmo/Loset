@@ -1,5 +1,5 @@
 <template>
-  <router-link tag="button" :to="to" class="icon-button" :class="{ 'no-bg': !bg }" :disabled="disabled">
+  <router-link tag="button" type="button" :to="to" class="icon-button" :class="{ 'no-bg': !bg }" :disabled="disabled">
     <font-awesome-icon :icon="icon" class="icon" v-if="icon"/>
     <span class="content" v-if="content">{{ content }}</span>
   </router-link>

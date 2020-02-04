@@ -42,7 +42,7 @@ function createWindow(): void {
       nodeIntegration: true,
     },
     show: false,
-    icon: path.join(__dirname, 'images/logo/loset-icon.png'),
+    icon: path.join(__dirname, 'images/logo/loset-icon-border.png'),
   })
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
@@ -135,7 +135,7 @@ app.on('ready', async () => {
 app.setAboutPanelOptions({
   applicationName: process.env.npm_package_productName,
   applicationVersion: process.env.npm_package_version,
-  iconPath: path.join(__dirname, 'images/logo/loset-icon.png'),
+  iconPath: path.join(__dirname, 'images/logo/loset-icon-border.png'),
   version: '',
   website: process.env.npm_package_homepage,
 })
