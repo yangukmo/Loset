@@ -1,11 +1,9 @@
 <p align="center">
-  <img src="src/images/docs/loset-120x163.svg" alt="Loset" width="120"/>
+  <img src="src/images/docs/loset-300.png" alt="Loset" width="150"/>
 </p>
 
-# Loset
 
-This is the application that executes the command at the path you choose. \
-You can run or shut down multiple applications at the same time.
+This is the application that executes the command at the path you choose.  You can run or shut down multiple applications at the same time.
 
 <p align="center">
   <img src="src/images/docs/screenshot.png" alt="Screenshot" width="1024">
