@@ -8,7 +8,7 @@ This is the application that executes the command at the path you choose. \
 You can run or shut down multiple applications at the same time.
 
 <p align="center">
-  <img src="src/images/docs/screenshot.png" alt="Screenshot" width="500">
+  <img src="src/images/docs/screenshot.png" alt="Screenshot" width="1024">
 </p>
 
 ## Project setup
