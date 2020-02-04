@@ -10,7 +10,7 @@
         <span class="name" v-text="app.name"/>
       </article>
       <article>
-        <span class="pid" v-text="app.pid" v-if="app.pid > 0"/>
+        <span class="pid" v-text="app.pid || '-'"/>
       </article>
       <article>
         <status :active="app.active"/>
