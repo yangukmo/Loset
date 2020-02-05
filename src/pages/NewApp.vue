@@ -131,10 +131,6 @@
       }
     }
 
-    test() {
-      console.log('# 1111111111111111111111', 1111111111111111111111)
-    }
-
     selectedDir(config: ISelectDirectory): void {
       this.dir = config.dir
       this.name = config.config.name
