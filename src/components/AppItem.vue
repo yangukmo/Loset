@@ -10,7 +10,8 @@
         <span class="name" v-text="app.name"/>
       </article>
       <article>
-        <span class="pid" v-text="app.pid || '-'"/>
+        <span class="pid" v-text="app.pid" v-if="app.pid"/>
+        <span class="pid not-exist" v-else>-</span>
       </article>
       <article>
         <status :active="app.active"/>
@@ -113,6 +114,10 @@
 
       .name {
         font-weight: 600;
+      }
+
+      .pid.not-exist {
+        user-select: none;
       }
 
       .handle {
