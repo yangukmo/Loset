@@ -110,16 +110,17 @@
       IconButton,
       Checkbox,
     },
-    computed: mapGetters('group', ['groupId']),
+    computed: mapGetters('group', ['groupId', 'groupColor']),
   })
   export default class NewApp extends Vue {
     private dir: string
     private name: string
     private start_cmd: string
-    private color: string
+    private color!: string
     private auto_start: boolean
     private hc: IHealthCheck
     private groupId!: string
+    private groupColor!: string
 
     constructor() {
       super()
@@ -127,7 +128,6 @@
       this.dir = ''
       this.name = ''
       this.start_cmd = ''
-      this.color = '#009CE0'
       this.auto_start = false
       this.hc = {
         active: false,
@@ -135,6 +135,10 @@
         path: '',
         interval: 5000,
       }
+    }
+
+    created(): void {
+      this.color = this.groupColor
     }
 
     selectedDir(config: ISelectDirectory): void {

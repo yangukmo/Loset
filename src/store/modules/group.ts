@@ -16,6 +16,9 @@ const getters = {
   groupName(state: IGroupState): string {
     return state.groups.find((group) => group.id === state.id)?.name || ''
   },
+  groupColor(state: IGroupState): string {
+    return state.groups.find((group) => group.id === state.id)?.theme?.color || '#009CE0'
+  },
   groups(state: IGroupState): IGroup[] {
     return state.groups
   },
