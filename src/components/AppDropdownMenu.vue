@@ -6,7 +6,7 @@
       <transition name="fade" mode="out-in">
         <ul class="dropdown-menu" v-if="isOpen" ref="menu">
           <li class="item" ref="item">
-            <icon-button icon="edit" content="Edit" :to="'/dashboard/apps/' + id"/>
+            <icon-button icon="edit" content="Edit" :to="'/apps/' + id"/>
           </li>
           <li class="item" ref="item">
             <icon-button icon="terminal" content="Logs" @click.native="onClickButton('open-terminal')"/>
@@ -30,7 +30,7 @@
   @Component({
     components: { IconButton },
   })
-  export default class DropdownMenu extends Vue {
+  export default class AppDropdownMenu extends Vue {
     @Prop({ type: String, required: true }) id!: string
     private isOpen!: boolean
 

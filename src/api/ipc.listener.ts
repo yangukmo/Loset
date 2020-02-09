@@ -12,6 +12,11 @@ export default class IpcListener {
   listenEvents(): void {
     ipcMain.on(IPC_EVENT.GET_APP, this.ipcService.getApp)
       .on(IPC_EVENT.GET_APPS, this.ipcService.getApps)
+      .on(IPC_EVENT.GET_GROUP, this.ipcService.getGroup)
+      .on(IPC_EVENT.GET_GROUPS, this.ipcService.getGroups)
+      .on(IPC_EVENT.CREATE_GROUP, this.ipcService.createGroup)
+      .on(IPC_EVENT.UPDATE_GROUP, this.ipcService.updateGroup)
+      .on(IPC_EVENT.DELETE_GROUP, this.ipcService.deleteGroup)
       .on(IPC_EVENT.SELECT_DIRECTORY, this.ipcService.selectDirectory)
       .on(IPC_EVENT.CREATE_APP, this.ipcService.createApp)
       .on(IPC_EVENT.UPDATE_APP, this.ipcService.updateApp)
@@ -26,11 +31,17 @@ export default class IpcListener {
       .on(IPC_EVENT.GET_ALL_OUTPUT, this.ipcService.getAllOutput)
       .on(IPC_EVENT.DELETE_APP_OUTPUT, this.ipcService.deleteOutput)
       .on(IPC_EVENT.OPEN_DIRECTORY, this.ipcService.openDirectory)
+      .on(IPC_EVENT.RESET, this.ipcService.reset)
   }
 
   removeEvents(): void {
     ipcMain.removeAllListeners(IPC_EVENT.GET_APP)
     ipcMain.removeAllListeners(IPC_EVENT.GET_APPS)
+    ipcMain.removeAllListeners(IPC_EVENT.GET_GROUP)
+    ipcMain.removeAllListeners(IPC_EVENT.GET_GROUPS)
+    ipcMain.removeAllListeners(IPC_EVENT.CREATE_GROUP)
+    ipcMain.removeAllListeners(IPC_EVENT.UPDATE_GROUP)
+    ipcMain.removeAllListeners(IPC_EVENT.DELETE_GROUP)
     ipcMain.removeAllListeners(IPC_EVENT.SELECT_DIRECTORY)
     ipcMain.removeAllListeners(IPC_EVENT.CREATE_APP)
     ipcMain.removeAllListeners(IPC_EVENT.UPDATE_APP)
@@ -45,5 +56,6 @@ export default class IpcListener {
     ipcMain.removeAllListeners(IPC_EVENT.GET_ALL_OUTPUT)
     ipcMain.removeAllListeners(IPC_EVENT.DELETE_APP_OUTPUT)
     ipcMain.removeAllListeners(IPC_EVENT.OPEN_DIRECTORY)
+    ipcMain.removeAllListeners(IPC_EVENT.RESET)
   }
 }

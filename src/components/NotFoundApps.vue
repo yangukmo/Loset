@@ -1,6 +1,5 @@
 <template>
   <card id="not-found-apps-wrapper">
-    <font-awesome-icon icon="exclamation" class="icon"/>
     <span>Cannot find the Apps</span>
   </card>
 </template>

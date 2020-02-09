@@ -31,6 +31,7 @@
     "reflect-metadata": "^0.1.13",
     "tree-kill": "^1.2.2",
     "typedi": "^0.8.0",
+    "uuid": "^3.4.0",
     "vee-validate": "^3.2.2",
     "vue": "^2.6.10",
     "vue-color": "^2.7.0",
@@ -45,6 +46,7 @@
   },
   "devDependencies": {
     "@types/node": "^13.5.0",
+    "@types/uuid": "^3.4.7",
     "@types/vue-color": "^2.4.2",
     "@typescript-eslint/eslint-plugin": "^2.17.0",
     "@typescript-eslint/parser": "^2.17.0",

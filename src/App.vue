@@ -5,13 +5,23 @@
 </template>
 
 <script lang="ts">
+  import { IPC_EVENT } from '@/shared/enum'
   import { MESSAGE_EVENT } from '@/shared/enum/message'
   import { ipcRenderer } from 'electron'
   import { Component, Vue } from 'vue-property-decorator'
   import { ToastOptions } from 'vue-toasted'
+  import { mapActions } from 'vuex'
 
-  @Component
+  @Component({
+    methods: {
+      ...mapActions('app', ['getApps']),
+      ...mapActions('group', ['getGroups']),
+    },
+  })
   export default class App extends Vue {
+    private getApps!: any
+    private getGroups!: any
+
     created(): void {
       const toastOptions: ToastOptions = {
         position: 'bottom-right',
@@ -19,21 +29,19 @@
       }
 
       ipcRenderer
-        .on(MESSAGE_EVENT.SUCCESS, (event, data) => {
-          this.$toasted.success(data, toastOptions)
-        })
-        .on(MESSAGE_EVENT.INFO, (event, data) => {
-          this.$toasted.info(data, toastOptions)
-        })
-        .on(MESSAGE_EVENT.ERROR, (event, data) => {
-          this.$toasted.error(data, toastOptions)
-        })
+        .on(MESSAGE_EVENT.SUCCESS, (event, data) => this.$toasted.success(data, toastOptions))
+        .on(MESSAGE_EVENT.INFO, (event, data) => this.$toasted.info(data, toastOptions))
+        .on(MESSAGE_EVENT.ERROR, (event, data) => this.$toasted.error(data, toastOptions))
+        .on(IPC_EVENT.SYNC_APPS, () => this.getApps())
+        .on(IPC_EVENT.SYNC_GROUPS, () => this.getGroups())
     }
 
     destoryed(): void {
       ipcRenderer.removeAllListeners(MESSAGE_EVENT.SUCCESS)
       ipcRenderer.removeAllListeners(MESSAGE_EVENT.ERROR)
       ipcRenderer.removeAllListeners(MESSAGE_EVENT.INFO)
+      ipcRenderer.removeAllListeners(IPC_EVENT.SYNC_APPS)
+      ipcRenderer.removeAllListeners(IPC_EVENT.SYNC_GROUPS)
     }
   }
 </script>

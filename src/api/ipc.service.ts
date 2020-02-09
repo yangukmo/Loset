@@ -1,10 +1,12 @@
 import App from '@/api/app/app'
 import AppManager from '@/api/app/app-manager'
 import ConfigFile from '@/api/app/config-file'
+import GroupManager from '@/api/group/group-manager'
+import HealthCheck2 from '@/api/hc/hc'
 import HealthCheckManager from '@/api/hc/hc-manager'
-import HealthCheck2 from '@/api/hc/hc2'
 import { ITheme } from '@/api/interface/app.interface'
 import { ISelectDirectory } from '@/api/interface/ipc-service.interface'
+import { Util } from '@/api/util'
 import WindowManager from '@/api/window-mananger'
 import { IPC_EVENT } from '@/shared/enum'
 import { MESSAGE, MESSAGE_EVENT } from '@/shared/enum/message'
@@ -14,6 +16,7 @@ import path from 'path'
 export default class IpcService {
   constructor(
     private readonly appManager: AppManager,
+    private readonly groupManager: GroupManager,
     private readonly hcManager: HealthCheckManager,
     private readonly windowManager: WindowManager,
   ) {
@@ -23,8 +26,60 @@ export default class IpcService {
     event.sender.send(IPC_EVENT.GET_APP, this.appManager.getApp(id))
   }
 
-  getApps = (event: IpcMainEvent): void => {
-    event.sender.send(IPC_EVENT.GET_APPS, this.appManager.getApps())
+  getApps = (event: IpcMainEvent, params: { group_id: string }): void => {
+    const group = this.groupManager.getGroup(params?.group_id)
+    const apps = this.appManager.getApps()
+    const filteredApps = group ? apps.filter((app) => group.apps.includes(app.id)) : apps
+
+    event.sender.send(IPC_EVENT.GET_APPS, filteredApps)
+  }
+
+  getGroup = (event: IpcMainEvent, id: string): void => {
+    const group = this.groupManager.getGroup(id)
+    event.sender.send(IPC_EVENT.GET_GROUP, group)
+  }
+
+  getGroups = (event: IpcMainEvent): void => {
+    const groups = this.groupManager.getGroups()
+    event.sender.send(IPC_EVENT.GET_GROUPS, groups)
+  }
+
+  createGroup = (event: IpcMainEvent, group: ICreateGroup): void => {
+    this.groupManager.createGroup(group)
+    event.returnValue = true
+  }
+
+  updateGroup = (event: IpcMainEvent, group: IUpdateGroup): void => {
+    this.groupManager.updateGroup({
+      id: group.id,
+      name: group.name,
+      theme: group.theme,
+    })
+  }
+
+  deleteGroup = async (event: IpcMainEvent, id: string): Promise<void> => {
+    const group = this.groupManager.getGroup(id)
+    const appCount = group.apps.length
+
+    const message = appCount ? MESSAGE.DELETE_APPS_IN_GROUP.replace('{appCount}', appCount.toString()) : MESSAGE.DELETE_GROUP
+
+    const { response } = await dialog.showMessageBox(this.windowManager.getWindow(), {
+      buttons: ['Cancel', 'Delete'],
+      message,
+      type: 'warning',
+    })
+
+    if (response === 0) {
+      return
+    }
+
+    group.apps.forEach((appId) => {
+      this.appManager.deleteApp(appId)
+    })
+
+    this.groupManager.deleteGroup(id)
+
+    event.sender.send(IPC_EVENT.SYNC_GROUPS)
   }
 
   selectDirectory = (event: IpcMainEvent): void => {
@@ -53,14 +108,7 @@ export default class IpcService {
     }
 
     const [appDir] = dirs as string[]
-    const hasApp = this.appManager.hasApp(App.generateId(appDir))
     const config = ConfigFile.getConfig(appDir)
-
-    if (hasApp) {
-      event.returnValue = response
-      event.sender.send(MESSAGE_EVENT.ERROR, MESSAGE.ALREADY_REGISTERED_APP)
-      return
-    }
 
     response.dir = appDir
     response.valid = true
@@ -76,7 +124,7 @@ export default class IpcService {
   }
 
   createApp = (event: IpcMainEvent, app: ICreateApp): void => {
-    const id = App.generateId(app.dir)
+    const id = Util.createRandomId()
     const hasApp = this.appManager.hasApp(id)
 
     if (hasApp) {
@@ -106,6 +154,13 @@ export default class IpcService {
       }))
     }
 
+    if (app.group_id) {
+      this.groupManager.addApp({
+        group_id: app.group_id,
+        app_id: id,
+      })
+    }
+
     event.returnValue = true
   }
 
@@ -126,16 +181,17 @@ export default class IpcService {
 
   deleteApps = async (event: IpcMainEvent): Promise<void> => {
     const { response } = await dialog.showMessageBox(this.windowManager.getWindow(), {
-      buttons: ['Delete', 'Cancel'],
+      buttons: ['Cancel', 'Delete'],
       message: MESSAGE.DELETE_ALL_APPS,
+      type: 'warning',
     })
 
-    if (response === 1) {
+    if (response === 0) {
       return
     }
 
     this.appManager.deleteApps()
-    event.sender.send(IPC_EVENT.GET_APPS, this.appManager.getApps())
+    event.sender.send(IPC_EVENT.SYNC_APPS)
   }
 
   startApp = (event: IpcMainEvent, id: string): void => {
@@ -147,7 +203,7 @@ export default class IpcService {
     }
 
     this.appManager.startApp(id)
-    event.sender.send(IPC_EVENT.GET_APPS, this.appManager.getApps())
+    event.sender.send(IPC_EVENT.SYNC_APPS)
   }
 
   startApps = (): void => {
@@ -163,16 +219,17 @@ export default class IpcService {
     }
 
     this.appManager.stopApp(id)
-    event.sender.send(IPC_EVENT.GET_APPS, this.appManager.getApps())
+    event.sender.send(IPC_EVENT.SYNC_APPS)
   }
 
   stopApps = async (): Promise<void> => {
     const { response } = await dialog.showMessageBox(this.windowManager.getWindow(), {
-      buttons: ['Yes', 'No'],
-      message: MESSAGE.STOP_APPS
+      buttons: ['No', 'Yes'],
+      message: MESSAGE.STOP_APPS,
+      type: 'warning',
     })
 
-    if (response === 1) {
+    if (response === 0) {
       return
     }
 
@@ -188,16 +245,17 @@ export default class IpcService {
     }
 
     const { response } = await dialog.showMessageBox(this.windowManager.getWindow(), {
-      buttons: ['Delete', 'Cancel'],
+      buttons: ['Cancel', 'Delete'],
       message: MESSAGE.DELETE_APP,
     })
 
-    if (response === 1) {
+    if (response === 0) {
       return
     }
 
     this.appManager.deleteApp(id)
-    event.sender.send(IPC_EVENT.GET_APPS, this.appManager.getApps())
+    this.groupManager.deleteApp(id)
+    event.sender.send(IPC_EVENT.SYNC_APPS)
   }
 
   openOutputWindow = (event: IpcMainEvent, id: string): void => {
@@ -216,6 +274,26 @@ export default class IpcService {
     const app = this.appManager.getApp(id)
     shell.openItem(app.dir)
   }
+
+  reset = async (event: IpcMainEvent): Promise<void> => {
+    const { response } = await dialog.showMessageBox(this.windowManager.getWindow(), {
+      buttons: ['Cancel', 'Reset'],
+      message: MESSAGE.RESET,
+      type: 'warning',
+    })
+
+    if (response === 0) {
+      event.returnValue = false
+      return
+    }
+
+    this.appManager.deleteApps()
+    this.groupManager.deleteGroups()
+    // TODO config-manager
+
+    this.windowManager.sendMessage(MESSAGE_EVENT.SUCCESS, MESSAGE.COMPLETED_RESET)
+    event.returnValue = true
+  }
 }
 
 interface ICreateApp {
@@ -230,6 +308,7 @@ interface ICreateApp {
     interval: number
   }
   theme: ITheme
+  group_id: string
 }
 
 interface IUpdateApp {
@@ -243,6 +322,19 @@ interface IUpdateApp {
     path: string
     interval: number
   }
+  theme: {
+    color: string
+  }
+}
+
+interface ICreateGroup {
+  name: string
+  theme: ITheme
+}
+
+interface IUpdateGroup {
+  id: string
+  name: string
   theme: {
     color: string
   }

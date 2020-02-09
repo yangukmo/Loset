@@ -1,4 +1,4 @@
-import HealthCheck2 from '@/api/hc/hc2'
+import HealthCheck2 from '@/api/hc/hc'
 
 export default class HealthCheckManager {
   private readonly hcMap: { [id: string]: HealthCheck2 }
