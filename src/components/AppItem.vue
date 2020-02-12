@@ -25,7 +25,7 @@
       <article class="control">
         <icon-button class="start" icon="play" @click.native="startApp" :disabled="app.active"/>
         <icon-button class="stop" icon="stop" @click.native="stopApp"/>
-        <dropdown-menu @open-directory="openDirectory" @open-terminal="openOutputWindow" @delete-app="deleteApp" :id="app.id"/>
+        <app-dropdown-menu @open-directory="openDirectory" @open-terminal="openOutputWindow" @delete-app="deleteApp" :id="app.id"/>
       </article>
     </section>
   </div>
@@ -33,7 +33,7 @@
 
 <script lang="ts">
   import { IAppInClient } from '@/api/interface/app.interface'
-  import DropdownMenu from '@/components/DropdownMenu.vue'
+  import AppDropdownMenu from '@/components/AppDropdownMenu.vue'
   import IconButton from '@/components/IconButton.vue'
   import Status from '@/components/Status.vue'
   import { IPC_EVENT } from '@/shared/enum'
@@ -45,7 +45,7 @@
     components: {
       Status,
       IconButton,
-      DropdownMenu,
+      AppDropdownMenu,
     },
     computed: mapGetters('searchApp', ['getKeyword']),
   })

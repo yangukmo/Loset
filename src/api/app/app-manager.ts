@@ -96,7 +96,7 @@ export default class AppManager {
     const app = this.storageManager.getApp({ id })
     const dynamicApp = this.apps[id]
 
-    dynamicApp.registerSyncAppsFn(() => this.windowManager.sendMessage(IPC_EVENT.GET_APPS, this.getApps()))
+    dynamicApp.registerSyncAppsFn(() => this.windowManager.sendMessage(IPC_EVENT.SYNC_APPS))
     dynamicApp.registerNotificationFn((event: MESSAGE_EVENT, data: MESSAGE) => this.windowManager.sendMessage(event, data))
     dynamicApp.registerOutputFn((data: Buffer) => this.windowManager.sendOutput({ id, data }))
     dynamicApp.start({
@@ -105,23 +105,27 @@ export default class AppManager {
     })
   }
 
-  startApps(): void {
-    for (const id of Object.keys(this.apps)) {
-      this.startApp(id)
+  startApps(appIds?: string[] | undefined): void {
+    const targetAppIds = appIds?.length ? appIds : Object.keys(this.apps)
+
+    for (const appId of targetAppIds) {
+      this.startApp(appId)
     }
   }
 
   stopApp(id: string): void {
     const dynamicApp = this.apps[id]
+    dynamicApp.stop()
     dynamicApp.unregisterSyncAppsFn()
     dynamicApp.unregisterNotificationFn()
     dynamicApp.unregisterOutputFn()
-    dynamicApp.stop()
   }
 
-  stopApps(): void {
-    for (const app of Object.values(this.apps)) {
-      app.stop()
+  stopApps(appIds?: string[] | undefined): void {
+    const targetAppIds = appIds?.length ? appIds : Object.keys(this.apps)
+
+    for (const appId of targetAppIds) {
+      this.stopApp(appId)
     }
   }
 

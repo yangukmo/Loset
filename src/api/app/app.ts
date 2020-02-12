@@ -1,5 +1,6 @@
 import { IApp, IAppInStorage, ITheme } from '@/api/interface/app.interface'
 import { IHealthCheck } from '@/api/interface/health-check.interface'
+import { Util } from '@/api/util'
 import crypto from 'crypto'
 
 export default class App implements IApp {
@@ -16,7 +17,7 @@ export default class App implements IApp {
   constructor(props: IApp) {
     this.dir = props.dir
     this.name = props.name
-    this.id = props.id || App.generateId(this.dir)
+    this.id = props.id || Util.createRandomId()
     this.start_cmd = props.start_cmd
     this.auto_start = props.auto_start
     this.hc = props.hc
@@ -37,9 +38,5 @@ export default class App implements IApp {
       order: this.order,
       theme: this.theme,
     }
-  }
-
-  static generateId(dir: string): string {
-    return crypto.createHash('sha256').update(dir).digest('hex')
   }
 }

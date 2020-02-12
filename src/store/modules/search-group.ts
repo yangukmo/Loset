@@ -1,24 +1,24 @@
-import { IRootState, ISearchAppState } from '@/store/module.interface'
 import { ActionContext } from 'vuex'
+import { IRootState, ISearchGroupState } from '../module.interface'
 
-const state: ISearchAppState = {
+const state: ISearchGroupState = {
   keyword: '',
 }
 
 const getters = {
-  getKeyword(state: ISearchAppState): string {
+  getKeyword(state: ISearchGroupState): string {
     return state.keyword
   },
 }
 
 const mutations = {
-  updateKeyword(state: ISearchAppState, keyword: string): void {
+  updateKeyword(state: ISearchGroupState, keyword: string): void {
     state.keyword = keyword
   },
 }
 
 const actions = {
-  setKeyword(context: ActionContext<ISearchAppState, IRootState>, keyword: InputEvent): void {
+  setKeyword(context: ActionContext<ISearchGroupState, IRootState>, keyword: InputEvent): void {
     context.commit('updateKeyword', keyword)
   },
 }

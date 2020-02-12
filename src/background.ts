@@ -1,6 +1,7 @@
 'use strict'
 
 import AppManager from '@/api/app/app-manager'
+import GroupManager from '@/api/group/group-manager'
 import HealthCheckManager from '@/api/hc/hc-manager'
 import IpcListener from '@/api/ipc.listener'
 import IpcService from '@/api/ipc.service'
@@ -56,9 +57,10 @@ function createWindow(): void {
   const electronStore = new ElectronStore({ defaults: StorageManager.getDefaults() })
   const storageManager = new StorageManager(electronStore)
   const windowManager = new WindowManager(win)
+  const groupManager = new GroupManager(storageManager)
   const appManager = new AppManager(storageManager, windowManager)
   const hcManager = new HealthCheckManager()
-  const ipcService = new IpcService(appManager, hcManager, windowManager)
+  const ipcService = new IpcService(appManager, groupManager, hcManager, windowManager)
   const ipcRouter = new IpcListener(ipcService)
 
   win.on('close', async (event) => {
@@ -67,12 +69,12 @@ function createWindow(): void {
     if (activeAppCount > 0) {
       const { response } = await dialog.showMessageBox({
         type: 'question',
-        buttons: ['Yes', 'No'],
+        buttons: ['No', 'Yes'],
         title: 'Confirm',
         message: MESSAGE.QUIT_LOSET + `\n${activeAppCount} apps are working.`,
       })
 
-      if (response === 1) {
+      if (response === 0) {
         event.preventDefault()
       }
     }
