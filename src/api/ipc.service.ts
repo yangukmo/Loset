@@ -206,8 +206,10 @@ export default class IpcService {
     event.sender.send(IPC_EVENT.SYNC_APPS)
   }
 
-  startApps = (): void => {
-    this.appManager.startApps()
+  startApps = (event: IpcMainEvent, group_id: string): void => {
+    const appIds = this.groupManager.getAppIds(group_id)
+
+    this.appManager.startApps(appIds)
   }
 
   stopApp = (event: IpcMainEvent, id: string): void => {
@@ -233,7 +235,7 @@ export default class IpcService {
       return
     }
 
-    const appIds = group_id && this.groupManager.getAppIds(group_id)
+    const appIds = this.groupManager.getAppIds(group_id)
 
     this.appManager.stopApps(appIds)
   }

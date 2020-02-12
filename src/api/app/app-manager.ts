@@ -105,26 +105,28 @@ export default class AppManager {
     })
   }
 
-  startApps(): void {
-    for (const id of Object.keys(this.apps)) {
-      this.startApp(id)
+  startApps(appIds?: string[] | undefined): void {
+    const targetAppIds = appIds?.length ? appIds : Object.keys(this.apps)
+
+    for (const appId of targetAppIds) {
+      this.startApp(appId)
     }
   }
 
   stopApp(id: string): void {
     const dynamicApp = this.apps[id]
+    dynamicApp.stop()
     dynamicApp.unregisterSyncAppsFn()
     dynamicApp.unregisterNotificationFn()
     dynamicApp.unregisterOutputFn()
-    dynamicApp.stop()
   }
 
-  stopApps(appIds?: string[]): void {
-    const targetAppIds = appIds || Object.keys(this.apps)
+  stopApps(appIds?: string[] | undefined): void {
+    const targetAppIds = appIds?.length ? appIds : Object.keys(this.apps)
 
-    targetAppIds.forEach((appId) => {
-      this.apps[appId].stop()
-    })
+    for (const appId of targetAppIds) {
+      this.stopApp(appId)
+    }
   }
 
   deleteApp(id: string): void {

@@ -82,7 +82,7 @@
     }
 
     startApps(): void {
-      ipcRenderer.send(IPC_EVENT.START_APPS)
+      ipcRenderer.send(IPC_EVENT.START_APPS, this.groupId)
     }
 
     stopApps(): void {
