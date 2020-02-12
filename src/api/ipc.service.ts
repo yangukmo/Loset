@@ -222,7 +222,7 @@ export default class IpcService {
     event.sender.send(IPC_EVENT.SYNC_APPS)
   }
 
-  stopApps = async (): Promise<void> => {
+  stopApps = async (event: IpcMainEvent, group_id: string): Promise<void> => {
     const { response } = await dialog.showMessageBox(this.windowManager.getWindow(), {
       buttons: ['No', 'Yes'],
       message: MESSAGE.STOP_APPS,
@@ -233,7 +233,9 @@ export default class IpcService {
       return
     }
 
-    this.appManager.stopApps()
+    const appIds = group_id && this.groupManager.getAppIds(group_id)
+
+    this.appManager.stopApps(appIds)
   }
 
   deleteApp = async (event: IpcMainEvent, id: string): Promise<void> => {

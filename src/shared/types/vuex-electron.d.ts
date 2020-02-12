@@ -1,3 +1,3 @@
 declare module 'vuex-electron' {
-  export const createPersistedState: () => void
+  export const createPersistedState: () => any
 }

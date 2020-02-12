@@ -119,10 +119,12 @@ export default class AppManager {
     dynamicApp.stop()
   }
 
-  stopApps(): void {
-    for (const app of Object.values(this.apps)) {
-      app.stop()
-    }
+  stopApps(appIds?: string[]): void {
+    const targetAppIds = appIds || Object.keys(this.apps)
+
+    targetAppIds.forEach((appId) => {
+      this.apps[appId].stop()
+    })
   }
 
   deleteApp(id: string): void {

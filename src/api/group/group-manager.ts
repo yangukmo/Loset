@@ -49,6 +49,12 @@ export default class GroupManager {
     this.storageManager.deleteGroups()
   }
 
+  getAppIds(id: string): string[] {
+    const group = this.storageManager.getGroup({ id })
+
+    return group?.apps || []
+  }
+
   deleteApp(id: string): void {
     const groups = this.storageManager.getGroups()
     const targetGroup = Object.values(groups).find((group) => {

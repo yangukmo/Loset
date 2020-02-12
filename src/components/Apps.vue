@@ -90,7 +90,7 @@
         return
       }
 
-      ipcRenderer.send(IPC_EVENT.STOP_APPS)
+      ipcRenderer.send(IPC_EVENT.STOP_APPS, this.groupId)
     }
 
     deleteApps(): void {
