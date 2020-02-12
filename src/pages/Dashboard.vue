@@ -29,14 +29,14 @@
   #dashboard-wrapper {
     display: grid;
     grid-template-areas: "groups apps";
-    grid-template-columns: 200px 1fr;
+    grid-template-columns: 250px 1fr;
 
     #groups {
       grid-area: groups;
-      padding: 1.5rem .75rem;
+      padding: 1.5rem 1rem;
       height: 100vh;
       overflow-y: auto;
-      background-color: rgba(0, 0, 0, .5);
+      background-color: rgba(18, 50, 60, 0.3);
       box-sizing: border-box;
       position: relative;
     }

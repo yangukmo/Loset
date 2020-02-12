@@ -82,6 +82,10 @@ export default class IpcService {
     event.sender.send(IPC_EVENT.SYNC_GROUPS)
   }
 
+  updateGroupsOrder = (event: IpcMainEvent, sortedGroupIdList: string[]): void => {
+    this.groupManager.updateGroupsOrder(sortedGroupIdList)
+  }
+
   selectDirectory = (event: IpcMainEvent): void => {
     const dirs = dialog.showOpenDialogSync(this.windowManager.getWindow(), { properties: ['openDirectory'] })
 
@@ -192,6 +196,7 @@ export default class IpcService {
 
     this.appManager.deleteApps()
     event.sender.send(IPC_EVENT.SYNC_APPS)
+    event.sender.send(IPC_EVENT.SYNC_GROUPS)
   }
 
   startApp = (event: IpcMainEvent, id: string): void => {
@@ -260,6 +265,7 @@ export default class IpcService {
     this.appManager.deleteApp(id)
     this.groupManager.deleteApp(id)
     event.sender.send(IPC_EVENT.SYNC_APPS)
+    event.sender.send(IPC_EVENT.SYNC_GROUPS)
   }
 
   openOutputWindow = (event: IpcMainEvent, id: string): void => {

@@ -49,6 +49,12 @@ export default class GroupManager {
     this.storageManager.deleteGroups()
   }
 
+  updateGroupsOrder(sortedGroupIdList: string[]): void {
+    sortedGroupIdList.forEach((id, order) => {
+      this.storageManager.updateGroupOrder({ id, order })
+    })
+  }
+
   getAppIds(id: string): string[] {
     const group = this.storageManager.getGroup({ id })
 

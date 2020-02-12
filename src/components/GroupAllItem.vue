@@ -1,7 +1,7 @@
 <template>
   <article id="group-all-item-wrapper" :class="{ 'active': isActive }" @click="onClickGroup">
     <section class="name">
-      <span>All</span>
+      <span class="title">All</span>
     </section>
   </article>
 </template>
@@ -33,17 +33,25 @@
 
 <style lang="scss" scoped>
   #group-all-item-wrapper {
+    display: flex;
+    align-items: center;
     color: #AAA;
+    padding: .5rem .75rem;
+    border-radius: .25rem;
+    height: 30px;
 
     .name {
       user-select: none;
-      height: 30px;
-      display: flex;
-      align-items: center;
+
+      .title {
+        color: #FFF;
+        font-size: 16px;
+      }
     }
 
-    &.active .name {
-      color: #FFF;
+
+    &.active {
+      background-color: rgba(14, 84, 105, 0.2)
     }
   }
 </style>

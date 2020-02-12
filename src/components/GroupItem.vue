@@ -1,7 +1,8 @@
 <template>
   <article v-show="isShowGroup" id="group-item-wrapper" :class="{ 'active': isActivated }">
     <section class="name" @click="onClickGroup">
-      <span>{{ group.name }}</span>
+      <span class="title">{{ group.name }}</span>
+      <span class="status">{{ appCount }} apps</span>
     </section>
     <section class="control">
       <icon-button icon="edit" :to="'/groups/' + group.id"/>
@@ -64,22 +65,15 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-
+    padding: .5rem .75rem;
+    border-radius: .25rem;
 
     &:hover .control {
       visibility: visible;
     }
 
-    .name {
-      user-select: none;
-      max-width: 100px;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
-    }
-
-    &.active .name {
-      color: #FFF;
+    &.active {
+      background-color: rgba(14, 84, 105, 0.2)
     }
 
     .control {
@@ -89,6 +83,27 @@
       justify-content: center;
 
       button {
+        font-size: 12px;
+      }
+    }
+
+    .name {
+      user-select: none;
+      display: flex;
+      flex-direction: column;
+
+      .title {
+        width: 135px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        color: #FFF;
+        font-size: 14px;
+        margin-bottom: .25rem;
+      }
+
+      .status {
+        color: #AAA;
         font-size: 12px;
       }
     }

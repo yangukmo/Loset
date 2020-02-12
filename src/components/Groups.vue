@@ -5,18 +5,20 @@
       <icon-button icon="cog" to="/settings"/>
     </section>
 
-    <section id="search-group">
-      <group-search-box :disabled="isEmptyGroups"/>
-    </section>
+    <!--    <section id="search-group">-->
+    <!--      <group-search-box :disabled="isEmptyGroups"/>-->
+    <!--    </section>-->
 
     <section id="content">
       <ul>
         <li>
           <group-all-item/>
         </li>
-        <li v-for="group of groups" :key="group.id">
-          <group-item :group="group"/>
-        </li>
+        <draggable v-model="groupsForSort" @end="onEndDrag">
+          <li v-for="group of groups" :key="group.id">
+            <group-item :group="group"/>
+          </li>
+        </draggable>
       </ul>
     </section>
   </div>
@@ -29,6 +31,8 @@
   import GroupItem from '@/components/GroupItem.vue'
   import GroupSearchBox from '@/components/GroupSearchBox.vue'
   import IconButton from '@/components/IconButton.vue'
+  import { IPC_EVENT } from '@/shared/enum'
+  import { ipcRenderer } from 'electron'
   import { Component, Vue } from 'vue-property-decorator'
   import Draggable from 'vuedraggable'
   import { mapActions, mapGetters } from 'vuex'
@@ -42,13 +46,14 @@
       IconButton,
       Draggable,
     },
-    methods: mapActions('group', ['getGroups']),
+    methods: mapActions('group', ['getGroups', 'setGroups']),
     computed: mapGetters('group', ['groups']),
   })
   export default class Groups extends Vue {
     private getGroups!: any
     private groups!: IGroup[]
     private isLoading!: boolean
+    private setGroups!: any
 
     constructor() {
       super()
@@ -63,14 +68,27 @@
       this.isLoading = true
       this.getGroups()
     }
+
+    get groupsForSort(): IGroup[] {
+      return this.groups
+    }
+
+    set groupsForSort(groups: IGroup[]) {
+      this.setGroups(groups)
+    }
+
+    onEndDrag(): void {
+      const sortedAppIdList = this.groups.map((group) => group.id)
+      ipcRenderer.send(IPC_EVENT.UPDATE_GROUPS_ORDER, sortedAppIdList)
+    }
   }
 </script>
 
 <style lang="scss" scoped>
   #groups-wrapper {
     display: grid;
-    grid-template-areas: "new-group" "search-group" "content";
-    grid-template-rows: 30px 50px 1fr;
+    grid-template-areas: "new-group" "content";
+    grid-template-rows: 35px 1fr;
     height: 100%;
     position: relative;
 
@@ -89,11 +107,7 @@
         color: #FFF;
 
         li {
-          padding: .25rem .5rem;
-
-          &.active {
-            background-color: rgba(14, 84, 105, 0.2);
-          }
+          padding: .25rem 0;
         }
       }
     }
