@@ -8,6 +8,7 @@ export enum IPC_EVENT {
   CREATE_GROUP = 'create-group',
   UPDATE_GROUP = 'update-group',
   DELETE_GROUP = 'delete-group',
+  UPDATE_GROUPS_ORDER = 'update-groups-order',
   SELECT_DIRECTORY = 'select-directory',
   CREATE_APP = 'create-app',
   UPDATE_APP = 'update-app',

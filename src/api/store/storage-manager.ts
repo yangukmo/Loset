@@ -51,6 +51,11 @@ export default class StorageManager {
     this.storage.set(`${KEY.GROUPS}`, {})
   }
 
+  updateGroupOrder(params: { id: string, order: number }): void {
+    this.storage.set(`${KEY.GROUPS}.${params.id}.order`, params.order)
+    this.storage.set(`${KEY.GROUPS}.${params.id}.updated_at`, Date.now())
+  }
+
   deleteAppInGroup(params: { group_id: string, app_id: string }): void {
     const { group_id, app_id } = params
 
@@ -83,8 +88,8 @@ export default class StorageManager {
   }
 
   updateAppOrder(params: { id: string, order: number }): void {
-    const app = this.getApp(params)
-    this.storage.set(`${KEY.APPS}.${params.id}`, { ...app, order: params.order, updated_at: Date.now() })
+    this.storage.set(`${KEY.APPS}.${params.id}.order`, params.order)
+    this.storage.set(`${KEY.APPS}.${params.id}.updated_at`, Date.now())
   }
 
   createNewOrder(): number {

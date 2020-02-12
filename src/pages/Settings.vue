@@ -8,11 +8,11 @@
       <h1 class="title no-select">Settings</h1>
 
       <form>
-        <card>
-          <input-label label="Auto Start">
-            <checkbox v-model="config.auto_start" class="checkbox" :disabled="true"/>
-          </input-label>
-        </card>
+<!--        <card>-->
+<!--          <input-label label="Auto Start">-->
+<!--            <checkbox v-model="config.auto_start" class="checkbox" :disabled="true"/>-->
+<!--          </input-label>-->
+<!--        </card>-->
 
         <card>
           <input-label label="Contact">

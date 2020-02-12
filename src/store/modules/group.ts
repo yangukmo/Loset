@@ -49,6 +49,9 @@ const actions = {
   setGroupId(context: ActionContext<IGroupState, IRootState>, id: string): void {
     context.commit('updateGroupId', id)
   },
+  setGroups(context: ActionContext<IGroupState, IRootState>, groups: IGroup[]): void {
+    context.commit('updateGroups', groups)
+  },
 }
 
 export default {

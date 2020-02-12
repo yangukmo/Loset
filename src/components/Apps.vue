@@ -2,7 +2,7 @@
   <div id="apps-wrapper">
     <section>
       <card id="title" :bg="false" :margin="false" :padding="false">
-        <h1>{{ groupName || 'Apps' }}</h1>
+        <h1>{{ groupName || 'All' }}</h1>
       </card>
 
       <card id="search" :bg="false" :margin="false" :padding="false">
@@ -27,7 +27,7 @@
           <div>Control</div>
         </div>
 
-        <draggable :list="apps" handle=".handle" @end="onEndDrag" :disabled="!groupId">
+        <draggable v-model="appsForSort" handle=".handle" @end="onEndDrag" :disabled="!groupId">
           <app-item v-for="app of apps" :app="app" :key="app.id"/>
         </draggable>
         <not-found-apps v-if="isEmptyApps"/>
@@ -58,7 +58,7 @@
       IconButton,
       Draggable,
     },
-    methods: mapActions('app', ['getApps']),
+    methods: mapActions('app', ['getApps', 'setApps']),
     computed: {
       ...mapGetters('app', ['apps', 'hasActive', 'isEmpty']),
       ...mapGetters('group', ['groupId', 'groupName']),
@@ -68,6 +68,7 @@
     private apps!: IAppInClient[]
     private isLoading!: boolean
     private getApps!: any
+    private setApps!: any
     private hasActive!: boolean
     private isEmpty!: boolean
     private groupId!: string
@@ -101,6 +102,14 @@
       ipcRenderer.send(IPC_EVENT.DELETE_APPS)
     }
 
+    get appsForSort(): IAppInClient[] {
+      return this.apps
+    }
+
+    set appsForSort(apps: IAppInClient[]) {
+      this.setApps(apps)
+    }
+
     onEndDrag(): void {
       const sortedAppIdList = this.apps.map((app) => app.id)
       ipcRenderer.send(IPC_EVENT.UPDATE_APPS_ORDER, sortedAppIdList)
@@ -125,7 +134,7 @@
       display: grid;
       grid-gap: 1rem;
       grid-template-areas: "title title" "search control" "content content";
-      grid-template-columns: 1fr 150px;
+      grid-template-columns: 1fr 113px;
       width: 100%;
       max-width: 800px;
 
