@@ -12,7 +12,7 @@ export default class WindowManager {
     this.childWindows = {}
   }
 
-  sendMessage<T>(event: IPC_EVENT | MESSAGE_EVENT, message: T): void {
+  sendMessage<T>(event: IPC_EVENT | MESSAGE_EVENT, message?: T): void {
     this.window.isDestroyed() || this.window.webContents.send(event, message)
   }
 

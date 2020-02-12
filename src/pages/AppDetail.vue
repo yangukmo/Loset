@@ -124,10 +124,6 @@
       ipcRenderer.send(IPC_EVENT.GET_APP, this.id)
     }
 
-    removeEvents(): void {
-      ipcRenderer.removeAllListeners(IPC_EVENT.GET_APP)
-    }
-
     update(): void {
       ipcRenderer.send(IPC_EVENT.UPDATE_APP, {
         id: this.app.id,
@@ -140,12 +136,8 @@
       this.$router.push('/dashboard')
     }
 
-    destroyed(): void {
-      this.removeEvents()
-    }
-
-    updateColor(colors: { hex: string }): void {
-      this.app.theme.color = colors.hex
+    updateColor(color: { hex: string }): void {
+      this.app.theme.color = color.hex
     }
   }
 </script>

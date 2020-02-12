@@ -1,6 +1,14 @@
 export enum IPC_EVENT {
   GET_APP = 'app',
   GET_APPS = 'apps',
+  SYNC_APPS = 'sync-apps',
+  GET_GROUP = 'group',
+  GET_GROUPS = 'groups',
+  SYNC_GROUPS = 'sync-groups',
+  CREATE_GROUP = 'create-group',
+  UPDATE_GROUP = 'update-group',
+  DELETE_GROUP = 'delete-group',
+  UPDATE_GROUPS_ORDER = 'update-groups-order',
   SELECT_DIRECTORY = 'select-directory',
   CREATE_APP = 'create-app',
   UPDATE_APP = 'update-app',
@@ -16,4 +24,5 @@ export enum IPC_EVENT {
   GET_ALL_OUTPUT = 'get-all-output',
   DELETE_APP_OUTPUT = 'delete-app-output',
   OPEN_DIRECTORY = 'open-directory',
+  RESET = 'reset',
 }

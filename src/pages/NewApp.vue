@@ -4,9 +4,13 @@
       <icon-button icon="times" id="btn-close" to="/dashboard"/>
     </section>
 
-    <section class="app-detail-content">
-      <h1 class="title no-select">Create a new app</h1>
+    <section id="title">
+      <card :bg="false">
+        <h1>Create a new app</h1>
+      </card>
+    </section>
 
+    <section id="app-detail">
       <validation-observer v-slot="{ invalid }">
         <form @submit="create">
           <card>
@@ -96,9 +100,9 @@
   import { IPC_EVENT } from '@/shared/enum'
   import { ipcRenderer } from 'electron'
   import { Component, Vue } from 'vue-property-decorator'
+  import { mapGetters } from 'vuex'
 
   @Component({
-    name: 'NewApp.vue',
     components: {
       InputLabel,
       DirectorySelector,
@@ -106,14 +110,17 @@
       IconButton,
       Checkbox,
     },
+    computed: mapGetters('group', ['groupId', 'groupColor']),
   })
   export default class NewApp extends Vue {
-    dir: string
-    name: string
-    start_cmd: string
-    color: string
-    auto_start: boolean
-    hc: IHealthCheck
+    private dir: string
+    private name: string
+    private start_cmd: string
+    private color!: string
+    private auto_start: boolean
+    private hc: IHealthCheck
+    private groupId!: string
+    private groupColor!: string
 
     constructor() {
       super()
@@ -121,7 +128,6 @@
       this.dir = ''
       this.name = ''
       this.start_cmd = ''
-      this.color = '#009CE0'
       this.auto_start = false
       this.hc = {
         active: false,
@@ -129,6 +135,10 @@
         path: '',
         interval: 5000,
       }
+    }
+
+    created(): void {
+      this.color = this.groupColor
     }
 
     selectedDir(config: ISelectDirectory): void {
@@ -161,12 +171,13 @@
         theme: {
           color: this.color,
         },
+        group_id: this.groupId,
       })
       this.$router.push('/dashboard')
     }
 
-    updateColor(colors: { hex: string }): void {
-      this.color = colors.hex
+    updateColor(color: { hex: string }): void {
+      this.color = color.hex
     }
   }
 </script>
@@ -188,15 +199,21 @@
       }
     }
 
-    section.app-detail-content {
+    section:not(.close-wrapper) {
       width: 100%;
       max-width: 500px;
+    }
 
-      .title {
+    #title {
+      h1 {
         color: #FFF;
         font-weight: 300;
+        margin: 0;
+        user-select: none;
       }
+    }
 
+    #app-detail {
       .wrapper-dir {
         display: flex;
         align-items: center;

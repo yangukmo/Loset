@@ -1,6 +1,8 @@
 import AppDetail from '@/pages/AppDetail.vue'
 import Dashboard from '@/pages/Dashboard.vue'
+import GroupDetail from '@/pages/GroupDetail.vue'
 import NewApp from '@/pages/NewApp.vue'
+import NewGroup from '@/pages/NewGroup.vue'
 import Output from '@/pages/Output.vue'
 import Settings from '@/pages/Settings.vue'
 import Vue from 'vue'
@@ -17,12 +19,22 @@ const router = new VueRouter({
       component: Dashboard,
     },
     {
-      path: '/dashboard/new-app',
+      path: '/groups/new',
+      name: 'new-group',
+      component: NewGroup,
+    },
+    {
+      path: '/groups/:id',
+      name: 'group-detail',
+      component: GroupDetail,
+    },
+    {
+      path: '/apps/new',
       name: 'new-app',
       component: NewApp,
     },
     {
-      path: '/dashboard/apps/:id',
+      path: '/apps/:id',
       name: 'app-detail',
       component: AppDetail,
     },
