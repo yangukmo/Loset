@@ -65,6 +65,13 @@ export default class StorageManager {
     this.storage.set(`${KEY.GROUPS}.${group.id}.apps`, apps)
   }
 
+  deleteAppsInGroup(params: { group_id: string }): void {
+    const { group_id } = params
+console.log('# group_id', group_id)
+    console.log('# ', this.storage.get(`${KEY.GROUPS}.${group_id}.apps`))
+    this.storage.set(`${KEY.GROUPS}.${group_id}.apps`, [])
+  }
+
   addAppInGroup(params: { group_id: string, app_id: string }): void {
     const { group_id, app_id } = params
 
