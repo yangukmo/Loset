@@ -99,7 +99,7 @@
         return
       }
 
-      ipcRenderer.send(IPC_EVENT.DELETE_APPS)
+      ipcRenderer.send(IPC_EVENT.DELETE_APPS, this.groupId)
     }
 
     get appsForSort(): IAppInClient[] {

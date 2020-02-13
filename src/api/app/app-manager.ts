@@ -131,16 +131,18 @@ export default class AppManager {
 
   deleteApp(id: string): void {
     const dynamicApp = this.apps[id]
-    if (dynamicApp.active) {
+    if (dynamicApp?.active) {
       this.stopApp(id)
     }
     delete this.apps[id]
     this.storageManager.deleteApp({ id })
   }
 
-  deleteApps(): void {
-    for (const id in this.apps) {
-      this.deleteApp(id)
+  deleteApps(appIds?: string[] | undefined): void {
+    const targetAppIds = appIds?.length ? appIds : Object.keys(this.apps)
+
+    for (const appId of targetAppIds) {
+      this.deleteApp(appId)
     }
   }
 
