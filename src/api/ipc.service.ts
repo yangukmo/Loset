@@ -59,6 +59,11 @@ export default class IpcService {
 
   deleteGroup = async (event: IpcMainEvent, id: string): Promise<void> => {
     const group = this.groupManager.getGroup(id)
+
+    if (!group) {
+      return
+    }
+
     const appCount = group.apps.length
 
     const message = appCount ? MESSAGE.DELETE_APPS_IN_GROUP.replace('{appCount}', appCount.toString()) : MESSAGE.DELETE_GROUP
@@ -73,10 +78,7 @@ export default class IpcService {
       return
     }
 
-    group.apps.forEach((appId) => {
-      this.appManager.deleteApp(appId)
-    })
-
+    group.apps.forEach((appId) => this.appManager.deleteApp(appId))
     this.groupManager.deleteGroup(id)
 
     event.sender.send(IPC_EVENT.SYNC_GROUPS)
@@ -183,7 +185,7 @@ export default class IpcService {
     this.appManager.updateAppsOrder(sortedAppIdList)
   }
 
-  deleteApps = async (event: IpcMainEvent): Promise<void> => {
+  deleteApps = async (event: IpcMainEvent, groupId: string): Promise<void> => {
     const { response } = await dialog.showMessageBox(this.windowManager.getWindow(), {
       buttons: ['Cancel', 'Delete'],
       message: MESSAGE.DELETE_ALL_APPS,
@@ -194,7 +196,18 @@ export default class IpcService {
       return
     }
 
-    this.appManager.deleteApps()
+    const group = this.groupManager.getGroup(groupId)
+    const apps = this.appManager.getApps()
+    const targetApps = group ? apps.filter((app) => group.apps.includes(app.id)) : apps
+    const targetAppIds = targetApps.map((app) => app.id)
+
+    this.appManager.deleteApps(targetAppIds)
+
+    if (group) {
+      this.groupManager.deleteAppsInGroup(group.id)
+    } else {
+      this.groupManager.deleteAppsInAllGroups()
+    }
     event.sender.send(IPC_EVENT.SYNC_APPS)
     event.sender.send(IPC_EVENT.SYNC_GROUPS)
   }

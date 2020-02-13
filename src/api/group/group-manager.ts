@@ -75,6 +75,20 @@ export default class GroupManager {
     }
   }
 
+  deleteAppsInGroup(groupId: string): void {
+    const group = this.storageManager.getGroup({ id: groupId })
+
+    if (group) {
+      this.storageManager.deleteAppsInGroup({ group_id: groupId })
+    }
+  }
+
+  deleteAppsInAllGroups(): void {
+    const groups = this.getGroups()
+
+    groups.forEach((group) => this.storageManager.deleteAppsInGroup({ group_id: group.id }))
+  }
+
   addApp(params: { group_id: string, app_id: string }): void {
     this.storageManager.addAppInGroup(params)
   }
