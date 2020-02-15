@@ -21,7 +21,7 @@ const isDevelopment = (process.env.NODE_ENV !== 'production')
 let win: BrowserWindow | null
 
 fixPath()
-
+app.allowRendererProcessReuse = true
 protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true, standard: true } }])
 
 function createWindow(): void {
@@ -36,7 +36,7 @@ function createWindow(): void {
     height: mainWindowState.height,
     x: mainWindowState.x,
     y: mainWindowState.y,
-    title: app.getName(),
+    title: app.name,
     titleBarStyle: 'customButtonsOnHover',
     backgroundColor: '#081B26',
     webPreferences: {
