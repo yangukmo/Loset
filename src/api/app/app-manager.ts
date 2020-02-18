@@ -6,7 +6,10 @@ import WindowManager from '@/api/window-mananger'
 import { IPC_EVENT } from '@/shared/enum'
 import { MESSAGE, MESSAGE_EVENT } from '@/shared/enum/message'
 import fs from 'fs'
+import 'reflect-metadata'
+import { Service } from 'typedi'
 
+@Service()
 export default class AppManager {
   private readonly apps: { [id: string]: DynamicApp }
 

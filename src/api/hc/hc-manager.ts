@@ -1,5 +1,8 @@
 import HealthCheck2 from '@/api/hc/hc'
+import 'reflect-metadata'
+import { Service } from 'typedi'
 
+@Service()
 export default class HealthCheckManager {
   private readonly hcMap: { [id: string]: HealthCheck2 }
 

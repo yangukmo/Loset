@@ -2,12 +2,15 @@ import { IPC_EVENT } from '@/shared/enum'
 import { MESSAGE_EVENT } from '@/shared/enum/message'
 import { BrowserWindow } from 'electron'
 import windowStateKeeper from 'electron-window-state'
+import 'reflect-metadata'
+import { Inject, Service } from 'typedi'
 
+@Service()
 export default class WindowManager {
   private readonly childWindows: { [id: string]: BrowserWindow }
 
   constructor(
-    private readonly window: BrowserWindow,
+    @Inject('main-window') private readonly window: BrowserWindow,
   ) {
     this.childWindows = {}
   }

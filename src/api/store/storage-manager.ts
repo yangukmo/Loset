@@ -3,10 +3,13 @@ import { IGroup, IUpdateGroup } from '@/api/interface/group.interface'
 import { IDefaults } from '@/api/interface/storage.interface'
 import { KEY } from '@/shared/enum/store'
 import ElectronStore from 'electron-store'
+import 'reflect-metadata'
+import { Inject, Service } from 'typedi'
 
+@Service()
 export default class StorageManager {
   constructor(
-    private readonly storage: ElectronStore,
+    @Inject('electron-store') private readonly storage: ElectronStore,
   ) {
   }
 
