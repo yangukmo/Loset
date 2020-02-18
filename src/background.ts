@@ -1,21 +1,19 @@
-'use strict'
-
 import AppManager from '@/api/app/app-manager'
-import GroupManager from '@/api/group/group-manager'
-import HealthCheckManager from '@/api/hc/hc-manager'
+import AppListener from '@/api/app/app.listener'
+import GroupListener from '@/api/group/group.listener'
 import IpcListener from '@/api/ipc.listener'
-import IpcService from '@/api/ipc.service'
 import StorageManager from '@/api/store/storage-manager'
 import WindowManager from '@/api/window-mananger'
 import { MESSAGE } from '@/shared/enum/message'
-import { app, BrowserWindow, dialog, protocol } from 'electron'
+import { dialog, app, BrowserWindow, protocol } from 'electron'
 import ElectronStore from 'electron-store'
 import windowStateKeeper from 'electron-window-state'
 import fixPath from 'fix-path'
-import 'reflect-metadata'
 import path from 'path'
 import treeKill from 'tree-kill'
+import { Container } from 'typedi'
 import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib'
+import 'reflect-metadata'
 
 const isDevelopment = (process.env.NODE_ENV !== 'production')
 let win: BrowserWindow | null
@@ -54,14 +52,15 @@ function createWindow(): void {
     win.loadURL('app://./index.html')
   }
 
-  const electronStore = new ElectronStore({ defaults: StorageManager.getDefaults() })
-  const storageManager = new StorageManager(electronStore)
-  const windowManager = new WindowManager(win)
-  const groupManager = new GroupManager(storageManager)
-  const appManager = new AppManager(storageManager, windowManager)
-  const hcManager = new HealthCheckManager()
-  const ipcService = new IpcService(appManager, groupManager, hcManager, windowManager)
-  const ipcRouter = new IpcListener(ipcService)
+  Container.set('electron-store', new ElectronStore({ defaults: StorageManager.getDefaults() }))
+  Container.set('main-window', win)
+
+  const groupListener = Container.get(GroupListener)
+  const appListener = Container.get(AppListener)
+  const ipcListener = Container.get(IpcListener)
+  const appManager = Container.get(AppManager)
+  const windowManager = Container.get(WindowManager)
+  // TODO etc listener
 
   win.on('close', async (event) => {
     const activeAppCount = appManager.getActiveAppCount()
@@ -82,8 +81,11 @@ function createWindow(): void {
 
   win.on('closed', () => {
     win = null
+    Container.remove('main-window')
 
-    ipcRouter.removeEvents()
+    groupListener.removeEvents()
+    appListener.removeEvents()
+    ipcListener.removeEvents()
     appManager.stopApps()
     windowManager.closeChildWindows()
     treeKill(process.pid)
