@@ -26,22 +26,9 @@ export default class GroupListener {
 
   private listenEvents(): void {
     this.eventList.forEach((ipcEvent) => ipcMain.on(ipcEvent.event, ipcEvent.func))
-
-    // ipcMain.on(IPC_EVENT.GET_GROUP, this.groupService.getGroup)
-    //   .on(IPC_EVENT.GET_GROUPS, this.groupService.getGroups)
-    //   .on(IPC_EVENT.CREATE_GROUP, this.groupService.createGroup)
-    //   .on(IPC_EVENT.UPDATE_GROUP, this.groupService.updateGroup)
-    //   .on(IPC_EVENT.DELETE_GROUP, this.groupService.deleteGroup)
-    //   .on(IPC_EVENT.UPDATE_GROUPS_ORDER, this.groupService.updateGroupsOrder)
   }
 
   removeEvents(): void {
     this.eventList.forEach((ipcEvent) => ipcMain.removeAllListeners(ipcEvent.event))
-    // ipcMain.removeAllListeners(IPC_EVENT.GET_GROUP)
-    // ipcMain.removeAllListeners(IPC_EVENT.GET_GROUPS)
-    // ipcMain.removeAllListeners(IPC_EVENT.CREATE_GROUP)
-    // ipcMain.removeAllListeners(IPC_EVENT.UPDATE_GROUP)
-    // ipcMain.removeAllListeners(IPC_EVENT.DELETE_GROUP)
-    // ipcMain.removeAllListeners(IPC_EVENT.UPDATE_GROUPS_ORDER)
   }
 }
