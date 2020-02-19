@@ -1,19 +1,19 @@
 import AppManager from '@/api/app/app-manager'
 import AppListener from '@/api/app/app.listener'
+import ConfigListener from '@/api/config/config.listener'
 import GroupListener from '@/api/group/group.listener'
-import IpcListener from '@/api/ipc.listener'
 import StorageManager from '@/api/store/storage-manager'
-import WindowManager from '@/api/window-mananger'
+import WindowManager from '@/api/window/window-mananger'
 import { MESSAGE } from '@/shared/enum/message'
-import { dialog, app, BrowserWindow, protocol } from 'electron'
+import { app, BrowserWindow, dialog, protocol } from 'electron'
 import ElectronStore from 'electron-store'
 import windowStateKeeper from 'electron-window-state'
 import fixPath from 'fix-path'
 import path from 'path'
+import 'reflect-metadata'
 import treeKill from 'tree-kill'
 import { Container } from 'typedi'
 import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib'
-import 'reflect-metadata'
 
 const isDevelopment = (process.env.NODE_ENV !== 'production')
 let win: BrowserWindow | null
@@ -40,6 +40,7 @@ function createWindow(): void {
     webPreferences: {
       nodeIntegration: true,
     },
+    darkTheme: true,
     show: false,
     icon: path.join(__dirname, 'images/logo/loset-icon-border.png'),
   })
@@ -57,7 +58,7 @@ function createWindow(): void {
 
   const groupListener = Container.get(GroupListener)
   const appListener = Container.get(AppListener)
-  const ipcListener = Container.get(IpcListener)
+  const configListener = Container.get(ConfigListener)
   const appManager = Container.get(AppManager)
   const windowManager = Container.get(WindowManager)
   // TODO etc listener
@@ -85,7 +86,7 @@ function createWindow(): void {
 
     groupListener.removeEvents()
     appListener.removeEvents()
-    ipcListener.removeEvents()
+    configListener.removeEvents()
     appManager.stopApps()
     windowManager.closeChildWindows()
     treeKill(process.pid)
@@ -98,34 +99,16 @@ function createWindow(): void {
   mainWindowState.manage(win)
 }
 
-// Quit when all windows are closed.
 app.on('window-all-closed', () => {
-  // On macOS it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
     app.quit()
   }
-})
-
-app.on('activate', () => {
-  // On macOS it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
+}).on('activate', () => {
   if (win === null) {
     createWindow()
   }
-})
-
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on('ready', async () => {
+}).on('ready', async () => {
   if (isDevelopment && !process.env.IS_TEST) {
-    // Install Vue Devtools
-    // Devtools extensions are broken in Electron 6.0.0 and greater
-    // See https://github.com/nklayman/vue-cli-plugin-electron-builder/issues/378 for more info
-    // Electron will not launch with Devtools extensions installed on Windows 10 with dark mode
-    // If you are not using Windows 10 dark mode, you may uncomment these lines
-    // In addition, if the linked issue is closed, you can upgrade electron and uncomment these lines
     try {
       await installVueDevtools()
     } catch (e) {
@@ -144,7 +127,6 @@ app.setAboutPanelOptions({
   website: process.env.npm_package_homepage,
 })
 
-// Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
   if (process.platform === 'win32') {
     process.on('message', data => {

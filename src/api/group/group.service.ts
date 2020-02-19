@@ -1,7 +1,7 @@
 import AppManager from '@/api/app/app-manager'
 import GroupManager from '@/api/group/group-manager'
 import { ITheme } from '@/api/interface/app.interface'
-import WindowManager from '@/api/window-mananger'
+import WindowManager from '@/api/window/window-mananger'
 import { IPC_EVENT } from '@/shared/enum'
 import { MESSAGE } from '@/shared/enum/message'
 import { dialog, IpcMainEvent } from 'electron'

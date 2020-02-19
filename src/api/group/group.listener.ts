@@ -1,5 +1,5 @@
 import GroupService from '@/api/group/group.service'
-import { IIPCEvent } from '@/api/interface/listener.interface'
+import { IIpcEvent } from '@/api/interface/listener.interface'
 import { IPC_EVENT } from '@/shared/enum'
 import { ipcMain } from 'electron'
 import 'reflect-metadata'
@@ -7,7 +7,7 @@ import { Service } from 'typedi'
 
 @Service()
 export default class GroupListener {
-  private readonly eventList: IIPCEvent[]
+  private readonly eventList: IIpcEvent[]
 
   constructor(
     private readonly groupService: GroupService,
