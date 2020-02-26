@@ -2,11 +2,14 @@ import App from '@/api/app/app'
 import { DynamicApp } from '@/api/app/dynamic-app'
 import { IAppInClient, IAppInStorage, IUpdateApp } from '@/api/interface/app.interface'
 import StorageManager from '@/api/store/storage-manager'
-import WindowManager from '@/api/window-mananger'
+import WindowManager from '@/api/window/window-mananger'
 import { IPC_EVENT } from '@/shared/enum'
 import { MESSAGE, MESSAGE_EVENT } from '@/shared/enum/message'
 import fs from 'fs'
+import 'reflect-metadata'
+import { Service } from 'typedi'
 
+@Service()
 export default class AppManager {
   private readonly apps: { [id: string]: DynamicApp }
 

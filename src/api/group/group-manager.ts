@@ -1,7 +1,10 @@
 import { IGroup } from '@/api/interface/group.interface'
 import StorageManager from '@/api/store/storage-manager'
 import { Util } from '@/api/util'
+import 'reflect-metadata'
+import { Service } from 'typedi'
 
+@Service()
 export default class GroupManager {
   constructor(
     private readonly storageManager: StorageManager,

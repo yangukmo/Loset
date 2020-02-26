@@ -1,27 +1,25 @@
-'use strict'
-
 import AppManager from '@/api/app/app-manager'
-import GroupManager from '@/api/group/group-manager'
-import HealthCheckManager from '@/api/hc/hc-manager'
-import IpcListener from '@/api/ipc.listener'
-import IpcService from '@/api/ipc.service'
+import AppListener from '@/api/app/app.listener'
+import ConfigListener from '@/api/config/config.listener'
+import GroupListener from '@/api/group/group.listener'
 import StorageManager from '@/api/store/storage-manager'
-import WindowManager from '@/api/window-mananger'
+import WindowManager from '@/api/window/window-mananger'
 import { MESSAGE } from '@/shared/enum/message'
 import { app, BrowserWindow, dialog, protocol } from 'electron'
 import ElectronStore from 'electron-store'
 import windowStateKeeper from 'electron-window-state'
 import fixPath from 'fix-path'
-import 'reflect-metadata'
 import path from 'path'
+import 'reflect-metadata'
 import treeKill from 'tree-kill'
+import { Container } from 'typedi'
 import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib'
 
 const isDevelopment = (process.env.NODE_ENV !== 'production')
 let win: BrowserWindow | null
 
 fixPath()
-
+app.allowRendererProcessReuse = true
 protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true, standard: true } }])
 
 function createWindow(): void {
@@ -36,12 +34,13 @@ function createWindow(): void {
     height: mainWindowState.height,
     x: mainWindowState.x,
     y: mainWindowState.y,
-    title: app.getName(),
+    title: app.name,
     titleBarStyle: 'customButtonsOnHover',
     backgroundColor: '#081B26',
     webPreferences: {
       nodeIntegration: true,
     },
+    darkTheme: true,
     show: false,
     icon: path.join(__dirname, 'images/logo/loset-icon-border.png'),
   })
@@ -54,14 +53,15 @@ function createWindow(): void {
     win.loadURL('app://./index.html')
   }
 
-  const electronStore = new ElectronStore({ defaults: StorageManager.getDefaults() })
-  const storageManager = new StorageManager(electronStore)
-  const windowManager = new WindowManager(win)
-  const groupManager = new GroupManager(storageManager)
-  const appManager = new AppManager(storageManager, windowManager)
-  const hcManager = new HealthCheckManager()
-  const ipcService = new IpcService(appManager, groupManager, hcManager, windowManager)
-  const ipcRouter = new IpcListener(ipcService)
+  Container.set('electron-store', new ElectronStore({ defaults: StorageManager.getDefaults() }))
+  Container.set('main-window', win)
+
+  const groupListener = Container.get(GroupListener)
+  const appListener = Container.get(AppListener)
+  const configListener = Container.get(ConfigListener)
+  const appManager = Container.get(AppManager)
+  const windowManager = Container.get(WindowManager)
+  // TODO etc listener
 
   win.on('close', async (event) => {
     const activeAppCount = appManager.getActiveAppCount()
@@ -82,8 +82,11 @@ function createWindow(): void {
 
   win.on('closed', () => {
     win = null
+    Container.remove('main-window')
 
-    ipcRouter.removeEvents()
+    groupListener.removeEvents()
+    appListener.removeEvents()
+    configListener.removeEvents()
     appManager.stopApps()
     windowManager.closeChildWindows()
     treeKill(process.pid)
@@ -96,34 +99,16 @@ function createWindow(): void {
   mainWindowState.manage(win)
 }
 
-// Quit when all windows are closed.
 app.on('window-all-closed', () => {
-  // On macOS it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
     app.quit()
   }
-})
-
-app.on('activate', () => {
-  // On macOS it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
+}).on('activate', () => {
   if (win === null) {
     createWindow()
   }
-})
-
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on('ready', async () => {
+}).on('ready', async () => {
   if (isDevelopment && !process.env.IS_TEST) {
-    // Install Vue Devtools
-    // Devtools extensions are broken in Electron 6.0.0 and greater
-    // See https://github.com/nklayman/vue-cli-plugin-electron-builder/issues/378 for more info
-    // Electron will not launch with Devtools extensions installed on Windows 10 with dark mode
-    // If you are not using Windows 10 dark mode, you may uncomment these lines
-    // In addition, if the linked issue is closed, you can upgrade electron and uncomment these lines
     try {
       await installVueDevtools()
     } catch (e) {
@@ -142,7 +127,6 @@ app.setAboutPanelOptions({
   website: process.env.npm_package_homepage,
 })
 
-// Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
   if (process.platform === 'win32') {
     process.on('message', data => {
