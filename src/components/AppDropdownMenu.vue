@@ -9,9 +9,6 @@
             <icon-button icon="edit" content="Edit" :to="'/apps/' + id"/>
           </li>
           <li class="item" ref="item">
-            <icon-button icon="terminal" content="Logs" @click.native="onClickButton('open-terminal')"/>
-          </li>
-          <li class="item" ref="item">
             <icon-button icon="folder-open" content="Directory" @click.native="onClickButton('open-directory')"/>
           </li>
           <li class="item" ref="item">
