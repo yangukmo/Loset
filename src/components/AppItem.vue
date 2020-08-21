@@ -25,7 +25,8 @@
       <article class="control">
         <icon-button class="start" icon="play" @click.native="startApp" :disabled="app.active"/>
         <icon-button class="stop" icon="stop" @click.native="stopApp"/>
-        <app-dropdown-menu @open-directory="openDirectory" @open-terminal="openOutputWindow" @delete-app="deleteApp" :id="app.id"/>
+        <icon-button class="" icon="terminal" @click.native="openOutputWindow"/>
+        <app-dropdown-menu @open-directory="openDirectory" @delete-app="deleteApp" :id="app.id"/>
       </article>
     </section>
   </div>
@@ -104,7 +105,7 @@
 
     #info {
       display: grid;
-      grid-template-columns: 30px 2fr 1fr 1fr 1fr 80px;
+      grid-template-columns: 30px 2fr 1fr 1fr 1fr 112px;
 
       article {
         display: flex;
